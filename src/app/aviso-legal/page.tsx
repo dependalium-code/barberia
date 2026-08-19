@@ -19,8 +19,10 @@ export default function AvisoLegal() {
     >
       {DEMO && (
         <p className="mb-8 border-t-2 border-bermellon bg-bermellon-humo px-4 py-3 text-[0.92rem] leading-relaxed">
-          Esta web es una demostración. Los datos del titular que aparecen abajo
-          son de ejemplo y hay que sustituirlos por los reales antes de publicarla.
+          <strong>Esta web es una demostración.</strong> Los datos del titular
+          que figuran aquí son reales y responden de este sitio; lo que es de
+          ejemplo es la barbería: la dirección del local, los precios, el equipo
+          y las imágenes no corresponden a ningún negocio existente.
         </p>
       )}
 
@@ -33,14 +35,17 @@ export default function AvisoLegal() {
             <strong>NIF:</strong> {LEGAL.nif}
           </li>
           <li>
-            <strong>Domicilio:</strong> {LEGAL.domicilioFiscal}
+            <strong>Domicilio social:</strong> {LEGAL.domicilioSocial}
+          </li>
+          <li>
+            <strong>Datos registrales:</strong> {LEGAL.registroMercantil}
           </li>
           <li>
             <strong>Correo:</strong>{" "}
             <a href={`mailto:${LEGAL.emailContacto}`}>{LEGAL.emailContacto}</a>
           </li>
           <li>
-            <strong>Teléfono:</strong> {NEGOCIO.telefono}
+            <strong>Teléfono:</strong> {LEGAL.telefono}
           </li>
           <li>
             <strong>Sitio web:</strong> {dominio}

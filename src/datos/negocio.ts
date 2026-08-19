@@ -48,15 +48,29 @@ export const NEGOCIO = {
 } as const;
 
 export const LEGAL = {
-  // DEMO — datos del titular. Rellenar con los del cliente antes de publicar.
-  titular: "Nombre del titular / Razón social",
-  nif: "00000000X",
-  domicilioFiscal: `${NEGOCIO.direccion}, ${NEGOCIO.codigoPostal} ${NEGOCIO.ciudad}`,
-  emailContacto: NEGOCIO.email,
+  // Datos REALES de la sociedad que publica esta web. No son de ejemplo:
+  // responden legalmente de ella aunque la barbería sea una maqueta.
+  titular: "Dependalium Global Services, S.L.",
+  nif: "B26786962",
+
+  // Domicilio SOCIAL, el inscrito. NO es la dirección del local, y mezclarlos
+  // es el error de siempre: el aviso legal y la privacidad tienen que declarar
+  // este (art. 10 LSSI-CE), mientras que el pie, la página de contacto y el
+  // JSON-LD enseñan la dirección comercial (NEGOCIO.direccion).
+  domicilioSocial: "Baixada de les Espenyes, 6, 1º · 08301 Mataró (Barcelona)",
+
+  // Redacción literal que quiere el titular, con sus mayúsculas. No reformatear.
+  registroMercantil:
+    "Sociedad inscrita en el Registro Mercantil de Barcelona, Tomo 100046, Folio 219, Hoja B-561219, Inscripción 1ª",
+
+  emailContacto: "info@dependalium.com",
+  telefono: "645 505 387",
+  telefonoE164: "+34645505387",
+
   // Región donde corren las funciones (fijada en vercel.json). Si se cambia
   // allí, hay que cambiarla aquí: alimenta el aviso legal y la privacidad.
   alojamiento: "Vercel Inc., región de Fráncfort (fra1), Unión Europea",
-  proveedorBaseDatos: "Neon (Unión Europea)",
+  proveedorBaseDatos: "Neon, región de Fráncfort (eu-central-1), Unión Europea",
 } as const;
 
 export const SITE_URL =

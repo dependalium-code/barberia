@@ -96,6 +96,21 @@ Hay tres sitios donde tocar, y solo tres.
 Nombre, dirección, teléfono, WhatsApp, correo, horario que se enseña, redes,
 mapa y datos del titular para las páginas legales.
 
+**Ojo con dos direcciones que no son la misma cosa:**
+
+- `NEGOCIO.direccion` es la **dirección comercial**: el local. Sale en el pie,
+  en contacto, en el mapa y en el JSON-LD.
+- `LEGAL.domicilioSocial` es el **domicilio inscrito** de la sociedad. Es el que
+  exige el artículo 10 de la LSSI-CE en el aviso legal y en la privacidad.
+
+Mezclarlos es el fallo habitual: si el aviso legal declara la dirección de la
+tienda, la identificación del titular deja de ser válida.
+
+Hoy el bloque `LEGAL` lleva los datos de **Dependalium Global Services, S.L.**,
+que es quien publica esta demostración y responde de ella. **Al venderla hay que
+sustituirlos por los de la empresa compradora**, incluidos NIF y datos
+registrales.
+
 **Poner `DEMO = false`.** Mientras esté en `true`:
 
 - el pie de página avisa de que el contenido es de ejemplo,
@@ -125,7 +140,7 @@ tocar código para nada de eso.
 ### Antes de publicar
 
 - [ ] `DEMO = false` y datos reales en `src/datos/negocio.ts`
-- [ ] Titular, NIF y domicilio fiscal en `LEGAL`
+- [ ] Titular, NIF, **domicilio social** y datos registrales del comprador en `LEGAL`
 - [ ] Coordenadas reales del mapa
 - [ ] SMTP del negocio configurado y **probado con una reserva de verdad**
 - [ ] `npm run seed:limpio`, no `npm run seed`

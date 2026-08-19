@@ -16,8 +16,10 @@ export default function Privacidad() {
     >
       {DEMO && (
         <p className="mb-8 border-t-2 border-bermellon bg-bermellon-humo px-4 py-3 text-[0.92rem] leading-relaxed">
-          Web de demostración: los datos del responsable son de ejemplo y deben
-          sustituirse por los reales antes de publicarla.
+          <strong>Web de demostración.</strong> El responsable del tratamiento
+          es real y esta política se aplica de verdad a los datos que dejes
+          aquí. De ejemplo son la barbería, su dirección, sus precios y su
+          equipo.
         </p>
       )}
 
@@ -27,7 +29,7 @@ export default function Privacidad() {
             <strong>Responsable:</strong> {LEGAL.titular} · NIF {LEGAL.nif}
           </li>
           <li>
-            <strong>Domicilio:</strong> {LEGAL.domicilioFiscal}
+            <strong>Domicilio social:</strong> {LEGAL.domicilioSocial}
           </li>
           <li>
             <strong>Contacto:</strong>{" "}

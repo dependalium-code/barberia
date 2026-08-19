@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DEMO, NEGOCIO } from "@/datos/negocio";
+import { AGENCIA, DEMO, NEGOCIO } from "@/datos/negocio";
 import { IconoSitio, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
 
 export function PieDePagina() {
@@ -100,9 +100,15 @@ export function PieDePagina() {
 
         {DEMO && (
           <p className="border-t border-tinta-80 py-5 text-[0.8rem] leading-relaxed text-acero-30">
-            Maqueta de demostración. La dirección, las fotos, los precios y el
-            equipo son contenido de ejemplo y no corresponden a ningún local
-            real; el teléfono y el correo sí son reales.
+            Demostración de {AGENCIA.nombre}. Los servicios, los precios y el
+            equipo son de ejemplo: no corresponden a ningún local real.{" "}
+            <Link
+              href="/para-barberias"
+              className="underline underline-offset-2 hover:text-acero-00"
+            >
+              Si tienes una barbería, esta web puede ser la tuya
+            </Link>
+            .
           </p>
         )}
       </div>

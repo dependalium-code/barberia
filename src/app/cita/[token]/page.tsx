@@ -8,6 +8,7 @@ import { avisarCitaAnulada } from "@/lib/correo";
 import { Cabecera } from "@/componentes/Cabecera";
 import { PieDePagina } from "@/componentes/PieDePagina";
 import { IconoCheck, IconoCruz, IconoTelefono } from "@/componentes/Iconos";
+import { AvisoDemoCita } from "@/componentes/BarraDemo";
 import { NEGOCIO, duracion, precio } from "@/datos/negocio";
 import { aFechaISO, fechaLarga, horaLocal } from "@/lib/tiempo";
 import { EstadoCita } from "@/generated/prisma/enums";
@@ -120,6 +121,8 @@ export default async function PaginaCita({
               </span>
             </div>
           </div>
+
+          <AvisoDemoCita />
 
           {anulada ? (
             <div className="mt-8">

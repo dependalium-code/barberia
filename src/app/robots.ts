@@ -1,20 +1,19 @@
 import type { MetadataRoute } from "next";
-import { DEMO, SITE_URL } from "@/datos/negocio";
+import { SITE_URL } from "@/datos/negocio";
 
+/**
+ * Se deja rastrear todo (menos lo privado) a propósito, incluso en modo
+ * demostración: quien decide qué se indexa es la etiqueta `robots` de cada
+ * página, no este archivo. Un `Disallow` aquí impediría a Google leer el
+ * `noindex` de las páginas de la barbería de ejemplo, y una URL bloqueada
+ * puede acabar indexada igual, sin descripción.
+ */
 export default function robots(): MetadataRoute.Robots {
-  // Mientras sea la maqueta de demostración no se indexa NADA: tiene una
-  // dirección inventada y una ficha de negocio que no existe. Que Google la
-  // recoja solo sirve para crear un local fantasma en Mataró.
-  if (DEMO) {
-    return { rules: [{ userAgent: "*", disallow: "/" }] };
-  }
-
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        // El panel y los enlaces privados de cita no se rastrean nunca.
         disallow: ["/panel", "/entrar", "/cita/", "/api/"],
       },
     ],

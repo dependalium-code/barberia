@@ -201,6 +201,37 @@ export async function avisarMensajeContacto(m: {
   });
 }
 
+export async function avisarLeadBarberia(m: {
+  id: string;
+  nombre: string;
+  telefono: string;
+  email: string;
+  negocio: string;
+  poblacion: string;
+  texto: string;
+}): Promise<ResultadoAviso> {
+  const para = process.env.AVISOS_EMAIL || process.env.SMTP_USUARIO;
+  if (!para) return { ok: false, motivo: "falta AVISOS_EMAIL" };
+
+  return enviar({
+    para,
+    asunto: `Barbería interesada · ${m.negocio || m.nombre}${m.poblacion ? ` · ${m.poblacion}` : ""}`,
+    html: plantilla(
+      "Una barbería quiere la web",
+      `<table role="presentation" style="font-size:15px;margin:0 0 16px">
+         ${fila("Negocio", escapar(m.negocio || "—"))}
+         ${fila("Población", escapar(m.poblacion || "—"))}
+         ${fila("Contacto", escapar(m.nombre))}
+         ${fila("Teléfono", escapar(m.telefono))}
+         ${fila("Email", escapar(m.email))}
+       </table>
+       <p style="margin:0;white-space:pre-wrap">${escapar(m.texto)}</p>`,
+    ),
+    texto: `Barbería interesada\n${m.negocio} · ${m.poblacion}\n${m.nombre} · ${m.telefono} · ${m.email}\n\n${m.texto}`,
+    responderA: m.email.includes("@no-facilitado") ? undefined : m.email,
+  });
+}
+
 function escapar(s: string) {
   return s
     .replace(/&/g, "&amp;")

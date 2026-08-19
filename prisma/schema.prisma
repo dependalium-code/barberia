@@ -31,6 +31,13 @@ enum RolUsuario {
   BARBERO
 }
 
+/// De dónde sale un mensaje. En la web de demostración conviven los dos:
+/// el cliente que pregunta por un corte y la barbería que quiere la web.
+enum TipoMensaje {
+  CONTACTO
+  BARBERIA
+}
+
 model Servicio {
   id          String   @id @default(cuid())
   slug        String   @unique
@@ -177,16 +184,21 @@ model Sesion {
 }
 
 model Mensaje {
-  id         String   @id @default(cuid())
+  id         String      @id @default(cuid())
+  tipo       TipoMensaje @default(CONTACTO)
   nombre     String
   email      String
   telefono   String?
+  /// Solo en los de tipo BARBERIA: cómo se llama el negocio y dónde está.
+  negocio    String?
+  poblacion  String?
   texto      String
-  leido      Boolean  @default(false)
-  avisoOk    Boolean  @default(false)
+  leido      Boolean     @default(false)
+  avisoOk    Boolean     @default(false)
   avisoError String?
-  creadoEn   DateTime @default(now())
+  creadoEn   DateTime    @default(now())
 
+  @@index([tipo, creadoEn])
   @@index([creadoEn])
 }
 

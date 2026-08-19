@@ -31,8 +31,10 @@ export const metadata: Metadata = {
     title: `${NEGOCIO.nombreLargo} · Cita previa online`,
     description: NEGOCIO.descripcion,
   },
-  // La maqueta de demostración no se indexa: ver src/app/robots.ts.
-  robots: DEMO ? { index: false, follow: false } : { index: true, follow: true },
+  // La barbería de ejemplo no se indexa, pero SÍ se siguen sus enlaces: con
+  // `nofollow`, Google no llegaría a /para-barberias desde ninguna página y la
+  // única puerta sería el sitemap.
+  robots: DEMO ? { index: false, follow: true } : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

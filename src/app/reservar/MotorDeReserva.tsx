@@ -5,6 +5,7 @@ import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { reservar, type EstadoReserva } from "./acciones";
 import { DiagramaCabeza } from "@/componentes/DiagramaCabeza";
 import { IconoCheck, IconoFlecha, IconoReloj } from "@/componentes/Iconos";
+import { AvisoDemoCita } from "@/componentes/BarraDemo";
 import { duracion, precio, NEGOCIO } from "@/datos/negocio";
 import { fechaCorta, fechaLarga, hoyISO, nombreDia, sumarDias } from "@/lib/tiempo";
 
@@ -816,6 +817,7 @@ function Resguardo({ codigo, token }: { codigo: string; token: string }) {
             Ver mi cita
             <IconoFlecha className="h-4 w-4" />
           </Link>
+          <AvisoDemoCita />
         </div>
       </div>
       <Link

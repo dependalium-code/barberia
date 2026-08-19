@@ -75,6 +75,60 @@ export const LEGAL = {
   proveedorBaseDatos: "Neon, región de Fráncfort (eu-central-1), Unión Europea",
 } as const;
 
+/**
+ * Quién vende esta web y qué se vende. Solo aplica mientras DEMO sea true:
+ * cuando la web se instala en una barbería de verdad, todo esto desaparece.
+ *
+ * NADA de lo que hay aquí es inventado. El precio y el plazo están vacíos a
+ * propósito: son afirmaciones comerciales y las pone el titular, no yo.
+ */
+export const AGENCIA = {
+  nombre: "Dependalium Global Services",
+  telefono: "645 505 387",
+  telefonoE164: "+34645505387",
+  whatsapp: "+34645505387",
+  email: "info@dependalium.com",
+
+  /** Vacío = no se enseña precio y el formulario pide presupuesto. */
+  precioDesde: "",
+  /** Vacío = no se promete plazo de entrega. */
+  plazo: "",
+
+  /** Lo que la web hace de verdad. Verificable abriendo esta misma página. */
+  incluye: [
+    {
+      titulo: "Reservas propias, sin comisión por cita",
+      texto:
+        "La agenda es tuya y vive en tu web. No pagas un porcentaje por cada cliente que reserva ni compartes tus clientes con un directorio donde está la competencia.",
+    },
+    {
+      titulo: "Panel para el mostrador",
+      texto:
+        "El día a la vista, un sillón por columna. Apuntas la cita del que entra por la puerta, la mueves de hora, la anulas o marcas quién no vino.",
+    },
+    {
+      titulo: "Tus servicios, tus precios, tu horario",
+      texto:
+        "Carta con duración y precio, horario de cada barbero con turno partido, vacaciones y cierres puntuales. Todo se cambia desde el panel, sin llamar a nadie.",
+    },
+    {
+      titulo: "Nunca dos citas en el mismo sillón",
+      texto:
+        "El hueco se comprueba en el servidor al confirmar. Si dos personas pinchan la misma hora a la vez, una se lleva el aviso de que ya está cogida.",
+    },
+    {
+      titulo: "Confirmación por correo",
+      texto:
+        "El cliente recibe su resguardo y un enlace para anular él mismo, que libera el hueco. Sale desde el correo de tu propio dominio.",
+    },
+    {
+      titulo: "Sin cookies ni banner",
+      texto:
+        "No lleva rastreadores, así que no necesita el cartel de aceptar cookies. Aviso legal, privacidad y política de cookies vienen escritos.",
+    },
+  ],
+} as const;
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
 

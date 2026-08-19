@@ -9,7 +9,7 @@ const ENLACES = [
   { href: "/panel/equipo", texto: "Equipo y horarios" },
   { href: "/panel/servicios", texto: "Servicios" },
   { href: "/panel/cierres", texto: "Cierres y vacaciones" },
-  { href: "/panel/mensajes", texto: "Mensajes" },
+  { href: "/panel/mensajes", texto: "Mensajes y leads" },
   { href: "/panel/ajustes", texto: "Ajustes" },
 ];
 

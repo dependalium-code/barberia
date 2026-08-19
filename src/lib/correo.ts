@@ -4,6 +4,26 @@ import { fechaLarga, horaLocal, aFechaISO } from "@/lib/tiempo";
 
 export type ResultadoAviso = { ok: boolean; motivo?: string };
 
+/**
+ * Comprueba las credenciales SIN enviar nada. Se usa desde
+ * `npm run correo:probar` antes de tocar el panel de Vercel: dice si el login
+ * entra o por qué no, en vez de descubrirlo cuando se pierde el primer lead.
+ */
+export async function probarCredenciales(): Promise<ResultadoAviso> {
+  const t = transporte();
+  if (!t) return { ok: false, motivo: "faltan SMTP_HOST, SMTP_USUARIO o SMTP_CLAVE" };
+  try {
+    await t.verify();
+    return { ok: true };
+  } catch (e) {
+    const err = e as { message?: string; responseCode?: number; code?: string };
+    return {
+      ok: false,
+      motivo: [err.responseCode, err.code, err.message ?? String(e)].filter(Boolean).join(" · "),
+    };
+  }
+}
+
 function transporte() {
   const host = process.env.SMTP_HOST;
   const usuario = process.env.SMTP_USUARIO;
@@ -15,6 +35,11 @@ function transporte() {
     port: puerto,
     secure: puerto === 465,
     auth: { user: usuario, pass: clave },
+    // En serverless no se puede esperar eternamente a que abra el socket: la
+    // función muere antes y el aviso se pierde sin dejar ni un error legible.
+    connectionTimeout: 12_000,
+    greetingTimeout: 8_000,
+    socketTimeout: 15_000,
   });
 }
 
@@ -47,7 +72,12 @@ async function enviar(opciones: {
     });
     return { ok: true };
   } catch (e) {
-    const motivo = e instanceof Error ? e.message : String(e);
+    // Los fallos de SMTP se distinguen por el código y sin verlo se depura a
+    // ciegas: 535 son credenciales, 550 el buzón, ETIMEDOUT el puerto cerrado.
+    const err = e as { message?: string; responseCode?: number; code?: string };
+    const motivo = [err.responseCode, err.code, err.message ?? String(e)]
+      .filter(Boolean)
+      .join(" · ");
     console.error("[CORREO] no se pudo enviar:", motivo);
     return { ok: false, motivo: motivo.slice(0, 300) };
   }

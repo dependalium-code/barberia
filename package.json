@@ -12,7 +12,8 @@
     "seed:limpio": "tsx prisma/seed.ts --limpio",
     "db:local": "pglite-server -p 55432 -m 20 -d .pgdata",
     "demo:agenda": "tsx prisma/demo-agenda.ts",
-    "correo:probar": "tsx scripts/probar-correo.ts"
+    "correo:probar": "tsx scripts/probar-correo.ts",
+    "dns": "tsx scripts/dns-hostinger.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",

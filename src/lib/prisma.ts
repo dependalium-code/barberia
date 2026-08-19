@@ -12,6 +12,25 @@ import { PrismaClient } from "@/generated/prisma/client";
  */
 const globalParaPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
+/**
+ * Neon entrega la cadena con `sslmode=require`. Hoy el driver lo trata como
+ * `verify-full`, pero avisa de que en pg v9 pasará a la semántica de libpq,
+ * que verifica menos. Se deja explícito para que el día que cambien la
+ * versión no baje la seguridad sin que nadie se entere.
+ */
+function conSslExplicito(url: string): string {
+  try {
+    const u = new URL(url);
+    const modo = u.searchParams.get("sslmode");
+    if (modo && ["require", "prefer", "verify-ca"].includes(modo)) {
+      u.searchParams.set("sslmode", "verify-full");
+    }
+    return u.toString();
+  } catch {
+    return url; // Si no es una URL válida, que falle el conector y lo diga él.
+  }
+}
+
 function crearCliente(): PrismaClient {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
@@ -19,7 +38,9 @@ function crearCliente(): PrismaClient {
       "Falta DATABASE_URL. En local, copia .env.example a .env; en Vercel, ponla en las variables de entorno del proyecto.",
     );
   }
-  return new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+  return new PrismaClient({
+    adapter: new PrismaPg({ connectionString: conSslExplicito(connectionString) }),
+  });
 }
 
 function obtener(): PrismaClient {

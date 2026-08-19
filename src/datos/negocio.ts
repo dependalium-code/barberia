@@ -89,10 +89,37 @@ export const AGENCIA = {
   whatsapp: "+34645505387",
   email: "info@dependalium.com",
 
-  /** Vacío = no se enseña precio y el formulario pide presupuesto. */
-  precioDesde: "",
+  /**
+   * Alta + cuota. Se cobra así y no de una vez porque los costes son
+   * mensuales (alojamiento, base de datos, buzón y sobre todo soporte) y
+   * porque el barbero compara contra lo que ya paga a Booksy cada mes, no
+   * contra un cheque grande.
+   *
+   * Los importes van SIN IVA a propósito: el comprador es una empresa, y
+   * entre empresas el precio se anuncia sin IVA. A consumidor final sería al
+   * revés y habría que enseñarlo con el IVA incluido.
+   *
+   * Vacíos = no se enseña el bloque de precio y el formulario pide presupuesto.
+   */
+  precioAlta: "299 €",
+  precioMensual: "89 €",
+  permanenciaMeses: 12,
   /** Vacío = no se promete plazo de entrega. */
   plazo: "",
+
+  /** Qué cubre cada una de las dos cifras. */
+  cubreElAlta: [
+    "Instalación con tu nombre, tus servicios, tus precios y tu equipo",
+    "Tu dominio conectado y el certificado de seguridad",
+    "Correo de confirmación saliendo desde tu propia dirección",
+    "Textos legales escritos y una sesión para enseñarte el panel",
+  ],
+  cubreLaCuota: [
+    "Alojamiento, base de datos y copias",
+    "Las reservas, sin comisión por cita y sin límite de citas",
+    "Soporte por teléfono y WhatsApp cuando algo no cuadra",
+    "Actualizaciones y arreglos sin coste añadido",
+  ],
 
   /** Lo que la web hace de verdad. Verificable abriendo esta misma página. */
   incluye: [

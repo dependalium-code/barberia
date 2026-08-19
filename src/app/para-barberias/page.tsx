@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Cabecera } from "@/componentes/Cabecera";
 import { PieDePagina } from "@/componentes/PieDePagina";
-import { IconoFlecha, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
+import { IconoCheck, IconoFlecha, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
 import { AGENCIA, DEMO, duracion, precio } from "@/datos/negocio";
 import { FormularioBarberia } from "./Formulario";
 
@@ -59,6 +59,14 @@ export default async function ParaBarberias() {
                 <span className="titular text-xl">Quiero verla</span>
                 <IconoFlecha className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
+              {AGENCIA.precioMensual && (
+                <a
+                  href="#precio"
+                  className="cota inline-flex items-center gap-2 border-2 border-white/30 px-6 py-4 text-acero-00 transition-colors hover:border-white"
+                >
+                  Desde {AGENCIA.precioMensual} al mes
+                </a>
+              )}
               <a
                 href={`tel:${AGENCIA.telefonoE164}`}
                 className="cota inline-flex items-center gap-2 border-2 border-white/30 px-6 py-4 text-acero-00 transition-colors hover:border-white"
@@ -133,13 +141,66 @@ export default async function ParaBarberias() {
         </section>
 
         {/* Precio: solo si el titular lo ha puesto. Nada inventado. */}
-        {AGENCIA.precioDesde && (
-          <section className="border-y-2 border-tinta bg-acero-10">
-            <div className="mx-auto max-w-[86rem] px-4 py-12 sm:px-6 lg:px-10">
-              <p className="cota text-acero-50">Precio</p>
-              <p className="titular mt-2 text-[clamp(2rem,6vw,3.5rem)]">
-                {AGENCIA.precioDesde}
+        {AGENCIA.precioAlta && AGENCIA.precioMensual && (
+          <section id="precio" className="scroll-mt-20 border-y-2 border-tinta bg-acero-10">
+            <div className="mx-auto max-w-[86rem] px-4 py-14 sm:px-6 sm:py-20 lg:px-10">
+              <h2 className="titular text-[clamp(1.9rem,5vw,3rem)]">Cuánto cuesta</h2>
+              <p className="mt-4 max-w-[56ch] text-[1rem] leading-relaxed text-acero-50">
+                Un alta para montarla con lo tuyo y una cuota que cubre el
+                funcionamiento. Sin comisión por cita y sin límite de reservas:
+                si un mes trabajas el doble, pagas lo mismo.
               </p>
+
+              <div className="mt-9 grid gap-px bg-acero-20 sm:grid-cols-2">
+                <div className="bg-acero-05 px-6 py-8 sm:px-8">
+                  <p className="cota text-acero-50">Alta, una sola vez</p>
+                  <p className="titular mt-3 text-[clamp(2.6rem,8vw,4rem)] leading-none">
+                    {AGENCIA.precioAlta}
+                  </p>
+                  <ul className="mt-6 grid gap-2.5">
+                    {AGENCIA.cubreElAlta.map((x) => (
+                      <li key={x} className="flex gap-3 text-[0.95rem] leading-relaxed text-tinta-60">
+                        <IconoCheck className="mt-0.5 h-4 w-4 shrink-0 text-bermellon" />
+                        {x}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="campo-tinta bg-tinta px-6 py-8 text-acero-05 sm:px-8">
+                  <p className="cota text-acero-30">Después, cada mes</p>
+                  <p className="titular mt-3 text-[clamp(2.6rem,8vw,4rem)] leading-none text-acero-00">
+                    {AGENCIA.precioMensual}
+                    <span className="titular ml-2 text-[1.1rem] text-acero-30">/mes</span>
+                  </p>
+                  <ul className="mt-6 grid gap-2.5">
+                    {AGENCIA.cubreLaCuota.map((x) => (
+                      <li key={x} className="flex gap-3 text-[0.95rem] leading-relaxed text-acero-30">
+                        <IconoCheck className="mt-0.5 h-4 w-4 shrink-0 text-bermellon-vivo" />
+                        {x}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* La permanencia se dice aquí y con el mismo cuerpo que el resto:
+                  esconderla en las condiciones es lo que hace que la gente se
+                  sienta engañada al tercer mes. */}
+              <p className="mt-6 max-w-[70ch] text-[0.92rem] leading-relaxed text-acero-50">
+                Precios sin IVA. Permanencia mínima de {AGENCIA.permanenciaMeses}{" "}
+                meses; a partir de ahí se puede dejar cuando quieras avisando con
+                un mes. La web se queda con nosotros: lo que se contrata es
+                tenerla funcionando, no comprarla.
+              </p>
+
+              <a
+                href="#hablamos"
+                className="group mt-8 inline-flex items-center gap-3 bg-bermellon px-8 py-4 text-white transition-colors hover:bg-tinta"
+              >
+                <span className="titular text-lg">Quiero verla</span>
+                <IconoFlecha className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
             </div>
           </section>
         )}

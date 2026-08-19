@@ -9,7 +9,8 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "seed": "tsx prisma/seed.ts",
-    "seed:limpio": "tsx prisma/seed.ts --limpio"
+    "seed:limpio": "tsx prisma/seed.ts --limpio",
+    "db:local": "pglite-server -p 55432 -m 20 -d .pgdata"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",

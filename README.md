@@ -146,15 +146,21 @@ un clon limpio.
 ## Desarrollo
 
 Este Mac no tiene Postgres ni Docker, pero Prisma trae **PGlite**, que es
-Postgres entero compilado a WASM:
+Postgres entero compilado a WASM. La base local vive en `.pgdata/` (ignorada
+por git):
 
 ```bash
-npx pglite-server -p 55432 -m 20 -d /ruta/a/pgdata &
-DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:55432/postgres?sslmode=disable" npx prisma db push
+npm run db:local &   # levanta Postgres en 127.0.0.1:55432
+npm run dev
 ```
 
-`?sslmode=disable` es obligatorio y `-m 20` también: por defecto admite una sola
-conexión y Next abre varias.
+El `.env` de desarrollo ya apunta ahí. `?sslmode=disable` en la URL es
+obligatorio —sin él Prisma da `P1001` aunque el servidor esté escuchando— y el
+`-m 20` también: por defecto PGlite admite una sola conexión y Next abre varias.
+
+La base local trae la demo sembrada (9 servicios, 3 barberos con horario y
+citas de ejemplo). Para empezar de cero: borrar `.pgdata/`, `npm run db:push` y
+`npm run seed`.
 
 ### Mapa del código
 

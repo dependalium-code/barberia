@@ -25,7 +25,9 @@ export function DatosEstructurados({
     priceRange: "€€",
     address: {
       "@type": "PostalAddress",
-      streetAddress: NEGOCIO.direccion,
+      // Sin calle no se declara `streetAddress`: una ficha con la dirección a
+      // medias es peor que sin ella, porque Google la da por buena.
+      ...(NEGOCIO.direccion ? { streetAddress: NEGOCIO.direccion } : {}),
       postalCode: NEGOCIO.codigoPostal,
       addressLocality: NEGOCIO.ciudad,
       addressRegion: NEGOCIO.provincia,

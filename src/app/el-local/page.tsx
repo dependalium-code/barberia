@@ -96,8 +96,12 @@ export default function PaginaLocal() {
                   <div>
                     <dt className="cota text-acero-50">Dónde</dt>
                     <dd className="mt-1.5 text-[1rem] leading-relaxed">
-                      {NEGOCIO.direccion}
-                      <br />
+                      {NEGOCIO.direccion && (
+                        <>
+                          {NEGOCIO.direccion}
+                          <br />
+                        </>
+                      )}
                       {NEGOCIO.codigoPostal} {NEGOCIO.ciudad} · {NEGOCIO.provincia}
                     </dd>
                   </div>

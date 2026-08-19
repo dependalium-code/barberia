@@ -32,8 +32,12 @@ export default function PaginaContacto() {
           <aside>
             <dl>
               <Dato icono={<IconoSitio className="h-5 w-5" />} clave="Dónde">
-                {NEGOCIO.direccion}
-                <br />
+                {NEGOCIO.direccion && (
+                  <>
+                    {NEGOCIO.direccion}
+                    <br />
+                  </>
+                )}
                 {NEGOCIO.codigoPostal} {NEGOCIO.ciudad} · {NEGOCIO.provincia}
               </Dato>
 

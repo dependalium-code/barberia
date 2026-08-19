@@ -221,10 +221,16 @@ export default async function Portada() {
                 <div className="flex gap-4 border-t border-tinta-60 py-5">
                   <IconoSitio className="mt-0.5 h-5 w-5 shrink-0 text-bermellon-vivo" />
                   <div>
-                    <dt className="cota text-acero-30">Dirección</dt>
+                    <dt className="cota text-acero-30">
+                      {NEGOCIO.direccion ? "Dirección" : "Dónde atendemos"}
+                    </dt>
                     <dd className="mt-1.5 text-[1rem] text-acero-00">
-                      {NEGOCIO.direccion}
-                      <br />
+                      {NEGOCIO.direccion && (
+                        <>
+                          {NEGOCIO.direccion}
+                          <br />
+                        </>
+                      )}
                       {NEGOCIO.codigoPostal} {NEGOCIO.ciudad} · {NEGOCIO.provincia}
                     </dd>
                   </div>

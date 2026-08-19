@@ -21,8 +21,10 @@ export const NEGOCIO = {
   whatsapp: "+34645505387",
   email: "info@labarberiamataro.com",
 
-  // DEMO — dirección de ejemplo. Sustituir por la calle real del local.
-  direccion: "Carrer d'Exemple, 00",
+  // Dirección comercial del local. VACÍA a propósito: no hay local todavía y
+  // una calle inventada en un dominio real acaba con alguien plantado en una
+  // puerta que no existe. Toda la interfaz sabe pintarse sin ella.
+  direccion: "",
   codigoPostal: "08301",
   ciudad: "Mataró",
   provincia: "Barcelona",
@@ -80,6 +82,19 @@ export function precio(centimos: number): string {
   return (centimos / 100)
     .toLocaleString("es-ES", { style: "currency", currency: "EUR" })
     .replace(/\s/g, " ");
+}
+
+/** Dirección para enseñar. Sin calle, se queda en la ciudad. */
+export function direccionCompleta(): string {
+  const linea = [NEGOCIO.direccion, `${NEGOCIO.codigoPostal} ${NEGOCIO.ciudad}`]
+    .filter(Boolean)
+    .join(", ");
+  return linea;
+}
+
+/** Dónde se atiende, en una línea corta. */
+export function zonaDeServicio(): string {
+  return `${NEGOCIO.ciudad} · ${NEGOCIO.provincia}`;
 }
 
 export function duracion(minutos: number): string {

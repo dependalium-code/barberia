@@ -30,8 +30,12 @@ export function PieDePagina() {
               <span className="flex items-start gap-2.5">
                 <IconoSitio className="mt-0.5 h-4 w-4 text-bermellon-vivo" />
                 <span>
-                  {NEGOCIO.direccion}
-                  <br />
+                  {NEGOCIO.direccion && (
+                    <>
+                      {NEGOCIO.direccion}
+                      <br />
+                    </>
+                  )}
                   {NEGOCIO.codigoPostal} {NEGOCIO.ciudad} · {NEGOCIO.provincia}
                 </span>
               </span>

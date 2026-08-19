@@ -1,4 +1,4 @@
-import { NEGOCIO } from "@/datos/negocio";
+import { NEGOCIO, direccionCompleta } from "@/datos/negocio";
 import { IconoFlecha } from "@/componentes/Iconos";
 
 /**
@@ -9,9 +9,7 @@ import { IconoFlecha } from "@/componentes/Iconos";
  * que el mapa puede estar en la página sin pelearse con el banner.
  */
 export function Mapa({ className = "" }: { className?: string }) {
-  const consulta = encodeURIComponent(
-    `${NEGOCIO.direccion}, ${NEGOCIO.codigoPostal} ${NEGOCIO.ciudad}`,
-  );
+  const consulta = encodeURIComponent(direccionCompleta());
 
   return (
     <figure className={`flex flex-col border border-tinta-60 ${className}`}>

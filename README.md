@@ -150,6 +150,41 @@ tocar código para nada de eso.
 
 ---
 
+## Sustituir a la WordPress en labarberiamataro.com
+
+La web vieja tenía **950 páginas de municipio** más seis landings de ciudad,
+todas salidas de una plantilla. Al reemplazarla:
+
+- **Se redirigen (301) solo las que tienen destino honesto**, en `next.config.ts`:
+  `/nuestro-equipo → /equipo`, `/contacta → /contacto`,
+  `/politica-de-privacidad → /privacidad`, `/terminos-y-condiciones → /aviso-legal`.
+- **El resto se retira con 410 Gone**, en `src/middleware.ts`: las de municipio,
+  las de ciudad, `/servicio-a-domicilio`, `/servicio-en-residencias`,
+  `/trabaja-con-nosotros`, `/gracias` y los puntos de entrada de WordPress.
+
+410 y no 404 porque dice «esto se ha retirado a propósito»: Google lo saca del
+índice antes y deja de reintentarlo. Y no un 301 a la portada, porque 950 URLs
+apuntando al mismo sitio es un 404 disfrazado y lo trata como tal.
+
+> ⚠️ Si el servicio **a domicilio** o el de **residencias** sigue vivo en otra
+> web del grupo, hay que sacar esas dos rutas del middleware y ponerles un 301
+> al destino real. Retirarlas es una decisión de negocio, no técnica.
+
+### Registros DNS en Hostinger
+
+El dominio está en Hostinger (`ns1/ns2.dns-parking.com`) con correo activo. En
+hPanel → DNS, **sin tocar los nameservers**:
+
+1. **Borrar el `ALIAS @`.** En Hostinger el ápex no tiene registro A: tiene un
+   ALIAS a `<dominio>.cdn.hstgr.net`. El panel rechaza tanto añadir un A con el
+   ALIAS puesto como cambiarle el tipo, así que hay que borrarlo primero.
+2. Crear `A @ → 76.76.21.21`, TTL 300.
+3. Cambiar `CNAME www → cname.vercel-dns.com` (ahora apunta a `…cdn.hstgr.net`).
+
+**No tocar:** los `MX`, el `TXT` de SPF, los `CNAME hostingermail-*._domainkey`
+ni el `TXT google-site-verification` — ese último se lleva por delante la
+verificación de Search Console.
+
 ## Desplegar
 
 Vercel. `vercel.json` fija la región en **`fra1`** (Fráncfort): por las

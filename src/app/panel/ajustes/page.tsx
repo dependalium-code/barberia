@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { leerAjustes } from "@/lib/agenda";
 import { TituloPanel } from "../piezas";
 import { FormularioAjustes } from "./Formulario";
-import { NEGOCIO } from "@/datos/negocio";
+import { NEGOCIO, direccionCompleta } from "@/datos/negocio";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Ajustes", robots: { index: false } };
@@ -35,7 +35,7 @@ export default async function PaginaAjustes() {
             ["Negocio", NEGOCIO.nombreLargo],
             ["Teléfono", NEGOCIO.telefono],
             ["Correo", NEGOCIO.email],
-            ["Dirección", `${NEGOCIO.direccion}, ${NEGOCIO.ciudad}`],
+            ["Dirección", direccionCompleta() || "sin calle publicada"],
           ].map(([k, v]) => (
             <div key={k} className="flex justify-between gap-3 border-b border-acero-20 py-1.5">
               <dt className="cota text-acero-50">{k}</dt>

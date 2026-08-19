@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { NEGOCIO, SITE_URL, precio } from "@/datos/negocio";
+import { NEGOCIO, SITE_URL, direccionCompleta, precio } from "@/datos/negocio";
 import { fechaLarga, horaLocal, aFechaISO } from "@/lib/tiempo";
 
 export type ResultadoAviso = { ok: boolean; motivo?: string };
@@ -65,7 +65,7 @@ function plantilla(titulo: string, cuerpo: string) {
       </td></tr>
       <tr><td style="padding:24px 28px;color:#cfcbc4;font-size:15px;line-height:1.65">${cuerpo}</td></tr>
       <tr><td style="padding:18px 28px 24px;border-top:1px solid #26262b;color:#8d8880;font-size:12.5px;line-height:1.6">
-        ${NEGOCIO.direccion}, ${NEGOCIO.codigoPostal} ${NEGOCIO.ciudad}<br>
+        ${direccionCompleta()}<br>
         <a href="tel:${NEGOCIO.telefonoE164}" style="color:${ORO};text-decoration:none">${NEGOCIO.telefono}</a>
         &nbsp;·&nbsp;<a href="${SITE_URL}" style="color:${ORO};text-decoration:none">${SITE_URL.replace(/^https?:\/\//, "")}</a>
       </td></tr>
@@ -109,7 +109,7 @@ export async function avisarClienteCitaConfirmada(cita: CitaParaCorreo): Promise
     </table>
     <p style="margin:0 0 20px">Si no puedes venir, anúlala desde aquí y el hueco queda libre para otra persona:</p>
     <p style="margin:0 0 22px"><a href="${enlace}" style="display:inline-block;background:${ORO};color:#141416;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:9px">Ver o anular mi cita</a></p>
-    <p style="margin:0;color:#8d8880;font-size:13px">Te esperamos en ${NEGOCIO.direccion}, ${NEGOCIO.ciudad}.</p>`;
+    <p style="margin:0;color:#8d8880;font-size:13px">Te esperamos en ${direccionCompleta()}.</p>`;
 
   return enviar({
     para: cita.clienteEmail,

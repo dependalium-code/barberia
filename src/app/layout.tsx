@@ -24,6 +24,10 @@ export const metadata: Metadata = {
     template: `%s · ${NEGOCIO.nombreLargo}`,
   },
   description: NEGOCIO.descripcion,
+  // Canónico relativo: Next lo resuelve contra metadataBase, así que cada
+  // página apunta a sí misma en el dominio real. Sin esto, la misma página
+  // servida desde la URL de Vercel y desde el dominio compiten en el índice.
+  alternates: { canonical: "./" },
   openGraph: {
     type: "website",
     locale: "es_ES",

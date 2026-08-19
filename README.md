@@ -60,7 +60,15 @@ npm run dev
 ```
 
 `npm run seed` (sin `:limpio`) mete además **carta y equipo de ejemplo**, que
-sirven para enseñar la demo. **Al entregar la web a un cliente se usa siempre
+sirven para enseñar la demo. Y para que la agenda no se vea vacía al enseñarla:
+
+```bash
+npm run demo:agenda              # llena hoy y mañana con citas «DEMO · …»
+npm run demo:agenda -- --borrar  # y las quita
+```
+
+Se lanza justo antes de una demostración, no se deja puesto: así no hay citas
+inventadas envejeciendo en producción. **Al entregar la web a un cliente se usa siempre
 `seed:limpio`**: no debe quedar ni un barbero ni un precio inventado.
 
 ### Variables de entorno

@@ -83,7 +83,7 @@ export default async function PaginaCitas({
         Citas
       </TituloPanel>
 
-      <nav className="mt-4 flex flex-wrap gap-px bg-acero-20">
+      <nav className="mt-4 flex w-fit max-w-full flex-wrap gap-px bg-acero-20">
         {FILTROS.map((f) => (
           <Link
             key={f.clave}

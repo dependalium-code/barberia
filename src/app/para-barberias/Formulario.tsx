@@ -104,7 +104,7 @@ export function FormularioBarberia() {
       </button>
 
       <p className="mt-4 max-w-[58ch] text-[0.82rem] leading-relaxed text-acero-30">
-        Te contestamos para enseñártela y pasarte presupuesto. No te apuntamos a
+        Te contestamos para enseñártela y resolver dudas. No te apuntamos a
         ninguna lista ni te mandamos publicidad.
       </p>
     </form>

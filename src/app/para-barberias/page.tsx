@@ -213,8 +213,9 @@ export default async function ParaBarberias() {
                 Cuéntanos de tu barbería
               </h2>
               <p className="mt-4 max-w-[52ch] text-[1rem] leading-relaxed text-acero-30">
-                Te la enseñamos con calma, respondemos lo que quieras y te
-                pasamos presupuesto. Sin compromiso y sin prisa.
+                {AGENCIA.precioMensual
+                  ? "Te la enseñamos con calma, te contamos cómo quedaría con lo tuyo dentro y respondemos lo que quieras. Sin compromiso y sin prisa."
+                  : "Te la enseñamos con calma, respondemos lo que quieras y te pasamos presupuesto. Sin compromiso y sin prisa."}
               </p>
 
               <div className="mt-8 grid gap-3">

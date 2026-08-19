@@ -12,6 +12,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async redirects() {
     return [
+      // www → dominio a secas. Si los dos sirven con 200 es contenido
+      // duplicado: el canónico lo resuelve, pero un 301 lo deja sin discusión.
+      {
+        source: "/:ruta*",
+        has: [{ type: "host", value: "www.labarberiamataro.com" }],
+        destination: "https://labarberiamataro.com/:ruta*",
+        permanent: true,
+      },
       { source: "/nuestro-equipo", destination: "/equipo", permanent: true },
       { source: "/contacta", destination: "/contacto", permanent: true },
       { source: "/politica-de-privacidad", destination: "/privacidad", permanent: true },

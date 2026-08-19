@@ -28,6 +28,10 @@ const CLIENTES = [
   "DEMO · Roger Puig", "DEMO · Enric Font", "DEMO · Bruno Mas",
   "DEMO · Gerard Bosch", "DEMO · Adrià Sanz", "DEMO · Sergi Llop",
   "DEMO · Marc Vidal", "DEMO · Nil Camps", "DEMO · Oriol Ferrer",
+  "DEMO · Xavi Riera", "DEMO · Arnau Costa", "DEMO · Guillem Sala",
+  "DEMO · Ferran Solé", "DEMO · Biel Torres", "DEMO · Jan Miró",
+  "DEMO · Pol Ventura", "DEMO · Iker Navarro", "DEMO · Unai Vila",
+  "DEMO · Martí Roig", "DEMO · Quim Batlle", "DEMO · Aitor Pons",
 ];
 
 async function main() {
@@ -67,7 +71,7 @@ async function main() {
         // Una cita cada hora y media dentro de su turno: la agenda se ve
         // trabajada pero deja huecos, que es lo que se quiere enseñar.
         for (let m = tramo.inicioMin + 30; m + 60 <= tramo.finMin; m += 90) {
-          if (cliente >= CLIENTES.length) break;
+          if (cliente >= CLIENTES.length) break;  // se reparte por orden: la lista tiene de sobra para tres sillones y dos días
           const servicio = servicios[puestas % servicios.length];
           const hora = `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
           const r = await crearCita({

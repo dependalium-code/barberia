@@ -1,7 +1,14 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/datos/negocio";
+import { DEMO, SITE_URL } from "@/datos/negocio";
 
 export default function robots(): MetadataRoute.Robots {
+  // Mientras sea la maqueta de demostración no se indexa NADA: tiene una
+  // dirección inventada y una ficha de negocio que no existe. Que Google la
+  // recoja solo sirve para crear un local fantasma en Mataró.
+  if (DEMO) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
+
   return {
     rules: [
       {

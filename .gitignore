@@ -44,3 +44,8 @@ next-env.d.ts
 
 # Postgres local (PGlite) para desarrollo
 /.pgdata
+
+# Skills instaladas por integraciones (no son código del proyecto)
+.agents/
+.claude/
+skills-lock.json

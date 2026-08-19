@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
-import { NEGOCIO, SITE_URL } from "@/datos/negocio";
+import { DEMO, NEGOCIO, SITE_URL } from "@/datos/negocio";
 import "./globals.css";
 
 const titular = Archivo({
@@ -31,7 +31,8 @@ export const metadata: Metadata = {
     title: `${NEGOCIO.nombreLargo} · Cita previa online`,
     description: NEGOCIO.descripcion,
   },
-  robots: { index: true, follow: true },
+  // La maqueta de demostración no se indexa: ver src/app/robots.ts.
+  robots: DEMO ? { index: false, follow: false } : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

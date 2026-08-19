@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "@/datos/negocio";
+import { DEMO, SITE_URL } from "@/datos/negocio";
 
 /**
  * Sin `lastModified` a la fecha del build: poner la fecha de hoy en TODAS las
@@ -7,6 +7,9 @@ import { SITE_URL } from "@/datos/negocio";
  * Aquí solo se declaran las URLs y su importancia relativa.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Sin sitemap mientras sea la demo: robots.ts ya la cierra entera.
+  if (DEMO) return [];
+
   const paginas: [string, number, MetadataRoute.Sitemap[number]["changeFrequency"]][] = [
     ["", 1, "weekly"],
     ["/reservar", 0.9, "daily"],

@@ -1,0 +1,214 @@
+// Centro de citas — La Barbería
+// Todos los instantes (inicio/fin/creadoEn) se guardan en UTC.
+// Los horarios semanales se guardan en minutos desde medianoche EN HORA LOCAL
+// del negocio (Europe/Madrid). La conversión vive en src/lib/tiempo.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  COMPLETADA
+  CANCELADA
+  NO_PRESENTADO
+}
+
+enum OrigenCita {
+  WEB
+  PANEL
+  TELEFONO
+}
+
+enum RolUsuario {
+  ADMIN
+  BARBERO
+}
+
+model Servicio {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  nombre      String
+  descripcion String?
+  duracionMin Int
+  precioCent  Int
+  categoria   String   @default("Barbería")
+  destacado   Boolean  @default(false)
+  activo      Boolean  @default(true)
+  orden       Int      @default(0)
+  creadoEn    DateTime @default(now())
+
+  barberos BarberoServicio[]
+  citas    Cita[]
+
+  @@index([activo, orden])
+}
+
+model Barbero {
+  id       String   @id @default(cuid())
+  slug     String   @unique
+  nombre   String
+  puesto   String?
+  bio      String?
+  foto     String?
+  color    String   @default("#c8a45c")
+  activo   Boolean  @default(true)
+  orden    Int      @default(0)
+  creadoEn DateTime @default(now())
+
+  servicios BarberoServicio[]
+  horarios  Horario[]
+  bloqueos  Bloqueo[]
+  citas     Cita[]
+  usuario   Usuario?
+
+  @@index([activo, orden])
+}
+
+model BarberoServicio {
+  barberoId  String
+  servicioId String
+
+  barbero  Barbero  @relation(fields: [barberoId], references: [id], onDelete: Cascade)
+  servicio Servicio @relation(fields: [servicioId], references: [id], onDelete: Cascade)
+
+  @@id([barberoId, servicioId])
+  @@index([servicioId])
+}
+
+/// Tramo de trabajo semanal. Varias filas por día = turno partido.
+/// inicioMin/finMin son minutos desde las 00:00 en hora local del negocio.
+model Horario {
+  id        String @id @default(cuid())
+  barberoId String
+  diaSemana Int // 1 = lunes ... 7 = domingo (ISO)
+  inicioMin Int
+  finMin    Int
+
+  barbero Barbero @relation(fields: [barberoId], references: [id], onDelete: Cascade)
+
+  @@index([barberoId, diaSemana])
+}
+
+/// Vacaciones, festivos y cierres puntuales. barberoId null = cierra todo el local.
+model Bloqueo {
+  id        String   @id @default(cuid())
+  barberoId String?
+  inicio    DateTime
+  fin       DateTime
+  motivo    String?
+  creadoEn  DateTime @default(now())
+
+  barbero Barbero? @relation(fields: [barberoId], references: [id], onDelete: Cascade)
+
+  @@index([inicio, fin])
+}
+
+model Cita {
+  id     String     @id @default(cuid())
+  codigo String     @unique // referencia corta que ve el cliente, p. ej. LBM-7F3K2
+  estado EstadoCita @default(CONFIRMADA)
+  origen OrigenCita @default(WEB)
+
+  barberoId  String
+  servicioId String
+
+  inicio DateTime
+  fin    DateTime
+
+  // Copia congelada: si mañana suben el precio, la cita de ayer no cambia.
+  servicioNombre String
+  duracionMin    Int
+  precioCent     Int
+
+  clienteNombre   String
+  clienteTelefono String
+  clienteEmail    String?
+  notas           String?
+
+  tokenGestion String  @unique // enlace privado del cliente para ver/anular
+  avisoOk      Boolean @default(false)
+  avisoError   String?
+
+  canceladaEn  DateTime?
+  motivoCancel String?
+
+  creadoEn     DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  barbero  Barbero  @relation(fields: [barberoId], references: [id])
+  servicio Servicio @relation(fields: [servicioId], references: [id])
+
+  @@index([barberoId, inicio])
+  @@index([inicio])
+  @@index([estado, inicio])
+}
+
+model Usuario {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  nombre       String
+  passwordHash String
+  rol          RolUsuario @default(ADMIN)
+  activo       Boolean    @default(true)
+  barberoId    String?    @unique
+  creadoEn     DateTime   @default(now())
+
+  barbero  Barbero?  @relation(fields: [barberoId], references: [id])
+  sesiones Sesion[]
+}
+
+model Sesion {
+  id        String   @id @default(cuid())
+  usuarioId String
+  tokenHash String   @unique
+  expiraEn  DateTime
+  creadoEn  DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([expiraEn])
+}
+
+model Mensaje {
+  id         String   @id @default(cuid())
+  nombre     String
+  email      String
+  telefono   String?
+  texto      String
+  leido      Boolean  @default(false)
+  avisoOk    Boolean  @default(false)
+  avisoError String?
+  creadoEn   DateTime @default(now())
+
+  @@index([creadoEn])
+}
+
+/// Reseñas de clientes reales, con moderación. Nace vacío a propósito.
+model Resena {
+  id        String   @id @default(cuid())
+  nombre    String
+  texto     String
+  estrellas Int
+  aprobada  Boolean  @default(false)
+  creadoEn  DateTime @default(now())
+
+  @@index([aprobada, creadoEn])
+}
+
+/// Reglas de la agenda que el negocio puede tocar desde el panel. Fila única id="ajustes".
+model Ajustes {
+  id                String @id @default("ajustes")
+  intervaloSlotMin  Int    @default(15)
+  antelacionMinHoras Int   @default(2)
+  ventanaDiasMax    Int    @default(60)
+  maxCitasPorEmail  Int    @default(3)
+  avisoReservas     String @default("")
+  actualizadoEn     DateTime @updatedAt
+}

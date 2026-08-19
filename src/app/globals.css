@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ───────────────────────────────────────────────────────────────
+   LA CARTA TÉCNICA
+   El mundo es la lámina de números de peine que cuelga junto al
+   espejo: papel acero, dos tintas, medidas por todas partes.
+   Los contrastes están calculados, no estimados; los valores de
+   texto secundario cumplen 4.5:1 sobre su propio fondo.
+   ─────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Papel */
+  --color-acero-00: #f1f3f4;
+  --color-acero-05: #e6e8ea;
+  --color-acero-10: #d6dadd;
+  --color-acero-20: #c2c8cc;
+  --color-acero-30: #a7b0b6;
+  --color-acero-50: #4e575e;
+
+  /* Tinta negra */
+  --color-tinta: #14171a;
+  --color-tinta-80: #22272c;
+  --color-tinta-60: #39424a;
+
+  /* Segunda tinta */
+  --color-bermellon: #c22e10;
+  --color-bermellon-vivo: #e84520;
+  --color-bermellon-hondo: #8e2109;
+  --color-bermellon-papel: #fbe0d8;
+  --color-bermellon-humo: #f4d9d1;
+
+  --font-titular: var(--tipo-titular), "Helvetica Neue", Arial, sans-serif;
+  --font-medida: var(--tipo-medida), ui-monospace, "SF Mono", monospace;
+
+  --radius-carta: 2px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background: var(--color-acero-05);
+    color: var(--color-tinta);
+    font-family: var(--font-titular);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-bermellon);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bermellon);
+    outline-offset: 3px;
+  }
+
+  /* Sobre campos de bermellón el foco negro se ve mejor que el bermellón. */
+  .campo-tinta :focus-visible,
+  .campo-bermellon :focus-visible {
+    outline-color: var(--color-tinta);
+  }
+  .campo-tinta :focus-visible {
+    outline-color: #fff;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Rótulo de medida: la letra pequeña que etiqueta una cota en un plano. */
+  .cota {
+    font-family: var(--font-medida);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Titular de lámina: ancho, apretado, en caja alta. */
+  .titular {
+    font-family: var(--font-titular);
+    font-weight: 700;
+    font-stretch: 125%;
+    letter-spacing: -0.025em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .medida {
+    font-family: var(--font-medida);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Regla graduada: el fondo de marcas de una escala. */
+  .graduacion {
+    background-image: repeating-linear-gradient(
+      to right,
+      currentColor 0 1px,
+      transparent 1px 100%
+    );
+    background-size: var(--paso, 12px) 100%;
+    background-repeat: repeat-x;
+  }
+
+  .sombra-carta {
+    box-shadow:
+      0 1px 2px rgba(20, 23, 26, 0.06),
+      0 8px 24px -12px rgba(20, 23, 26, 0.28);
+  }
+
+  .sombra-alzada {
+    box-shadow:
+      0 2px 4px rgba(20, 23, 26, 0.08),
+      0 18px 40px -16px rgba(20, 23, 26, 0.34);
+  }
+}
+
+/* Entrada única y orquestada: la lámina se revela por bandas, de arriba a
+   abajo, con una curva exponencial. No hay una segunda animación de entrada
+   repetida en cada sección. */
+@keyframes banda {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 -2% 0);
+  }
+}
+
+.banda {
+  animation: banda 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--retardo, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banda { animation: none; }
+}
+
+@layer components {
+  /* Páginas de leer: medida corta, enlaces sobrios y listas con aire. */
+  .texto-legal a {
+    color: var(--color-bermellon);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .texto-legal a:hover {
+    color: var(--color-tinta);
+  }
+  .texto-legal ul {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.15rem;
+    list-style: square;
+  }
+  .texto-legal strong {
+    color: var(--color-tinta);
+    font-weight: 600;
+  }
+  .texto-legal code {
+    font-family: var(--font-medida);
+    font-size: 0.86em;
+    background: var(--color-acero-10);
+    padding: 0.1em 0.35em;
+  }
 }

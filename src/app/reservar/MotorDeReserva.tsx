@@ -137,7 +137,14 @@ export function MotorDeReserva({
 
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-14">
-      <div>
+      {/* `min-w-0` NO es decorativo: sin él, un hijo de grid vale
+          `min-width: auto` y no puede encogerse por debajo de su contenido. La
+          tira de días es `min-w-max` dentro de un `overflow-x-auto`, así que
+          empujaba esta columna hasta 1043 px y con ella la página ENTERA: en un
+          móvil de 390 el documento medía 1059 y se deslizaba en horizontal,
+          barra de pasos incluida. Con esto, la columna se encoge y el desborde
+          se queda dentro de la tira, que es donde tiene que estar. */}
+      <div className="min-w-0">
         {/* La regla de progreso */}
         <ol className="mb-10 grid grid-cols-4 gap-px bg-acero-20">
           {PASOS.map((p, i) => {
@@ -464,7 +471,7 @@ function PasoDiaYHora({
       )}
 
       {/* Los días, con la carga del día dibujada a escala */}
-      <div className="mt-7 overflow-x-auto pb-2">
+      <div className="tira-dias mt-7 overflow-x-auto overscroll-x-contain pb-2">
         <ul className="flex min-w-max gap-px bg-acero-20">
           {(cargando && !dias ? Array.from({ length: 14 }) : catorce).map((d, i) => {
             const dia = d as DiaApi | undefined;
@@ -484,7 +491,7 @@ function PasoDiaYHora({
                   disabled={libre === 0}
                   onClick={() => alElegirDia(dia.fecha)}
                   aria-pressed={activo}
-                  className={`flex w-[4.6rem] flex-col items-center gap-1.5 px-2 py-3 transition-colors ${
+                  className={`flex w-[4.6rem] snap-start flex-col items-center gap-1.5 px-2 py-3 transition-colors ${
                     activo
                       ? "bg-tinta text-white"
                       : libre === 0

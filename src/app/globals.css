@@ -209,3 +209,13 @@
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+/* La tira de días de la reserva se desplaza a dedo en el móvil. El imán evita
+   que quede un día cortado por la mitad al soltar, y la barra fina se esconde
+   porque en escritorio ya están los botones de «Antes» y «Después». */
+.tira-dias {
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+.tira-dias::-webkit-scrollbar { height: 4px; }
+.tira-dias::-webkit-scrollbar-thumb { background: var(--color-acero-20); }

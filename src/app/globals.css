@@ -196,3 +196,16 @@
     padding: 0.1em 0.35em;
   }
 }
+
+/* ───────────────────────────────────────────────────────────────
+   El distintivo flotante de reCAPTCHA
+   Se oculta porque se planta abajo a la derecha y tapa el botón de
+   confirmar la cita en el móvil. Google lo permite SOLO a cambio de
+   poner la atribución dentro del formulario, y ahí está, en
+   <AtribucionRecaptcha>.
+   Con `visibility` y NO con `display:none`: con display, la v3 se
+   queja en consola y en algunos navegadores deja de puntuar.
+   ─────────────────────────────────────────────────────────────── */
+.grecaptcha-badge {
+  visibility: hidden;
+}

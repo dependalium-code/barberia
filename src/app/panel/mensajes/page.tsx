@@ -107,6 +107,14 @@ export default async function PaginaMensajes({
                   {esLead && (
                     <span className="cota bg-bermellon px-2 py-1 text-white">Barbería</span>
                   )}
+                  {m.revisar && (
+                    <span
+                      className="cota border border-tinta px-2 py-1"
+                      title={m.verifNota ?? undefined}
+                    >
+                      Sin comprobar
+                    </span>
+                  )}
                   <span className="titular text-[1.25rem]">
                     {esLead && m.negocio ? m.negocio : m.nombre}
                   </span>
@@ -143,6 +151,17 @@ export default async function PaginaMensajes({
                 <p className="mt-3 whitespace-pre-wrap text-[0.95rem] leading-relaxed">
                   {m.texto}
                 </p>
+
+                {m.revisar && (
+                  <p className="mt-3 border-l-4 border-tinta bg-acero-10 px-3 py-2 text-[0.82rem] leading-relaxed">
+                    <strong>Míralo antes de contar con él.</strong> No se pudo
+                    comprobar que lo mandara una persona
+                    {m.verifNota ? `: ${m.verifNota}` : ""}
+                    {m.verifScore !== null ? ` · puntuación ${m.verifScore.toFixed(2)}` : ""}.
+                    Se guarda igual: rechazar por esto costaría clientes de
+                    verdad.
+                  </p>
+                )}
 
                 {m.avisoError && (
                   <p className="mt-3 border-t-2 border-bermellon bg-bermellon-humo px-3 py-2 text-[0.82rem]">

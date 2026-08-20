@@ -311,6 +311,9 @@ export default async function PaginaAgenda({
                 clienteEmail: abierta.clienteEmail,
                 notas: abierta.notas,
                 avisoError: abierta.avisoError,
+                revisar: abierta.revisar,
+                verifNota: abierta.verifNota,
+                verifScore: abierta.verifScore,
                 etiquetaEstado: ETIQUETA_ESTADO[abierta.estado],
               }}
               barberos={barberos.map((b) => ({ id: b.id, nombre: b.nombre }))}

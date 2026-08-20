@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { avisarLeadBarberia } from "@/lib/correo";
+import { verificarRecaptcha } from "@/lib/recaptcha";
 
 export type EstadoLead = {
   ok: boolean;
@@ -41,6 +42,10 @@ export async function pedirInformacion(
     return { ok: false, mensaje: "Ese correo no parece válido.", valores };
   }
 
+  // reCAPTCHA se consulta pero NO decide: solo marca. Este es el lead que paga
+  // las facturas y no se tira ninguno por una puntuación.
+  const verificacion = await verificarRecaptcha(leer("recaptcha") || null);
+
   // Primero se guarda. Un lead que solo existe como correo se pierde entero si
   // el aviso cae en spam, y este es el lead que paga las facturas.
   let guardado;
@@ -54,6 +59,9 @@ export async function pedirInformacion(
         negocio: valores.negocio.slice(0, 120) || null,
         poblacion: valores.poblacion.slice(0, 120) || null,
         texto: valores.texto.slice(0, 2000) || "(sin mensaje)",
+        revisar: verificacion.revisar,
+        verifScore: verificacion.score,
+        verifNota: verificacion.nota,
       },
     });
   } catch (e) {
@@ -66,7 +74,7 @@ export async function pedirInformacion(
     };
   }
 
-  const aviso = await avisarLeadBarberia({ id: guardado.id, ...valores });
+  const aviso = await avisarLeadBarberia({ id: guardado.id, ...valores, verificacion });
   if (!aviso.ok) console.error(`[LEAD ${guardado.id}] el aviso no salió:`, aviso.motivo);
   await prisma.mensaje.update({
     where: { id: guardado.id },

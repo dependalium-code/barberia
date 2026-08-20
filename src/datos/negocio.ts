@@ -148,10 +148,12 @@ export const AGENCIA = {
       texto:
         "El cliente recibe su resguardo y un enlace para anular él mismo, que libera el hueco. Sale desde el correo de tu propio dominio.",
     },
+    // OJO: esta viñeta describe el montaje real. Si algún día se instala
+    // analítica, deja de ser cierta y hay que reescribirla junto con /cookies.
     {
-      titulo: "Sin cookies ni banner",
+      titulo: "Sin banner de cookies",
       texto:
-        "No lleva rastreadores, así que no necesita el cartel de aceptar cookies. Aviso legal, privacidad y política de cookies vienen escritos.",
+        "No lleva analítica ni rastreadores, así que nadie se encuentra el cartel de aceptar cookies al entrar. Lo único de terceros es el filtro antirrobots de los formularios, y ahí se pide permiso antes de cargar nada. Aviso legal, privacidad y política de cookies vienen escritos.",
     },
   ],
 } as const;

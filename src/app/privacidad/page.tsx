@@ -3,6 +3,9 @@ import Link from "next/link";
 import { Apartado, PaginaTexto } from "@/componentes/PaginaTexto";
 import { DEMO, LEGAL, NEGOCIO } from "@/datos/negocio";
 
+/** Sin clave configurada no hay reCAPTCHA, y esta política no lo menciona. */
+const CON_RECAPTCHA = Boolean(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+
 export const metadata: Metadata = {
   title: "Política de privacidad",
   description: `Qué datos pedimos al reservar, para qué los usamos y cómo ejercer tus derechos. ${NEGOCIO.nombreLargo}.`,
@@ -69,6 +72,14 @@ export default function Privacidad() {
             <strong>Llevar el registro de citas atendidas:</strong> interés
             legítimo en la gestión ordinaria del negocio (art. 6.1.f).
           </li>
+          {CON_RECAPTCHA && (
+            <li>
+              <strong>Comprobar que no eres un programa:</strong> tu
+              consentimiento (art. 6.1.a), que te pedimos dentro del formulario
+              antes de cargar nada de Google. Si dices que no, el envío sale
+              igual.
+            </li>
+          )}
         </ul>
         <p>
           No hacemos perfilado ni decisiones automatizadas, y no te vamos a
@@ -106,11 +117,33 @@ export default function Privacidad() {
             <strong>Correo saliente:</strong> el proveedor de correo del propio
             negocio, para enviarte la confirmación de tu cita.
           </li>
+          {CON_RECAPTCHA && (
+            <li>
+              <strong>Filtro antirrobots:</strong> Google Ireland Ltd. y Google
+              LLC (reCAPTCHA), <strong>solo si das permiso</strong> al enviar un
+              formulario. Reciben tu dirección IP y cómo te has movido por la
+              página; devuelven una puntuación. No les mandamos tu nombre, tu
+              teléfono ni tu mensaje.
+            </li>
+          )}
         </ul>
         <p>
-          No cedemos ni vendemos datos a terceros con fines comerciales, ni
-          hacemos transferencias fuera del Espacio Económico Europeo.
+          No cedemos ni vendemos datos a terceros con fines comerciales.
         </p>
+        {CON_RECAPTCHA ? (
+          <p>
+            <strong>Transferencias internacionales:</strong> los datos de tu
+            cita y de tus mensajes se quedan en la Unión Europea. La única
+            salida posible es la de reCAPTCHA hacia Google LLC en Estados
+            Unidos, amparada en el Marco de Privacidad de Datos UE-EE. UU., y
+            solo ocurre si aceptas ese permiso. Rechazándolo, no sale nada del
+            Espacio Económico Europeo.
+          </p>
+        ) : (
+          <p>
+            Tampoco hacemos transferencias fuera del Espacio Económico Europeo.
+          </p>
+        )}
       </Apartado>
 
       <Apartado titulo="Tus derechos">
@@ -138,6 +171,15 @@ export default function Privacidad() {
           se guardan cifradas, nunca en claro. La web se sirve siempre por
           conexión segura (HTTPS).
         </p>
+        {CON_RECAPTCHA && (
+          <p>
+            Los formularios llevan además un filtro antirrobots. Un envío
+            <strong> nunca se descarta</strong> por ese filtro: si no se puede
+            comprobar, se guarda igual y lo revisamos a mano. Preferimos mirar
+            un envío de más que perder el de una persona con un bloqueador de
+            anuncios.
+          </p>
+        )}
       </Apartado>
 
       <Apartado titulo="Cookies">

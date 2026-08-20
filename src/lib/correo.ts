@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { NEGOCIO, SITE_URL, direccionCompleta, precio } from "@/datos/negocio";
 import { fechaLarga, horaLocal, aFechaISO } from "@/lib/tiempo";
+import { marcaDeAsunto, textoVerificacion, type Verificacion } from "@/lib/recaptcha";
 
 export type ResultadoAviso = { ok: boolean; motivo?: string };
 
@@ -103,6 +104,18 @@ function plantilla(titulo: string, cuerpo: string) {
   </td></tr></table></body></html>`;
 }
 
+/**
+ * Recuadro de «míralo antes de contar con esto». Sale solo cuando reCAPTCHA no
+ * dio el visto bueno; el envío ya está guardado igualmente.
+ */
+function avisoRevisar(v: Verificacion | undefined): string {
+  const texto = v ? textoVerificacion(v) : null;
+  if (!texto) return "";
+  return `<p style="margin:0 0 18px;padding:12px 14px;border-left:3px solid #e08a2e;background:#2a2118;color:#f0c98a;font-size:13.5px;line-height:1.55">
+    <strong>Revísalo antes de contar con esto.</strong><br>No se pudo comprobar que lo mandara una persona: ${escapar(texto)}.
+  </p>`;
+}
+
 function fila(clave: string, valor: string) {
   return `<tr><td style="padding:5px 14px 5px 0;color:#8d8880;white-space:nowrap">${clave}</td><td style="padding:5px 0;color:#f5f3ef;font-weight:600">${valor}</td></tr>`;
 }
@@ -119,6 +132,10 @@ export type CitaParaCorreo = {
   clienteEmail: string | null;
   notas: string | null;
   barberoNombre: string;
+  /** reCAPTCHA. La cita existe pase lo que pase; esto solo la marca. */
+  revisar?: boolean;
+  verifScore?: number | null;
+  verifNota?: string | null;
 };
 
 export async function avisarClienteCitaConfirmada(cita: CitaParaCorreo): Promise<ResultadoAviso> {
@@ -159,8 +176,14 @@ export async function avisarNegocioCitaNueva(cita: CitaParaCorreo): Promise<Resu
   if (!para) return { ok: false, motivo: "falta AVISOS_EMAIL" };
   const fecha = fechaLarga(aFechaISO(cita.inicio));
   const hora = horaLocal(cita.inicio);
+  const verificacion: Verificacion = {
+    revisar: cita.revisar ?? false,
+    score: cita.verifScore ?? null,
+    nota: cita.verifNota ?? null,
+  };
 
   const cuerpo = `
+    ${avisoRevisar(verificacion)}
     <table role="presentation" style="font-size:15px;margin:0 0 18px">
       ${fila("Cuándo", `${fecha} · ${hora}`)}
       ${fila("Servicio", escapar(cita.servicioNombre))}
@@ -175,9 +198,11 @@ export async function avisarNegocioCitaNueva(cita: CitaParaCorreo): Promise<Resu
 
   return enviar({
     para,
-    asunto: `Nueva cita · ${fecha} ${hora} · ${cita.clienteNombre}`,
+    asunto: `${marcaDeAsunto(verificacion)}Nueva cita · ${fecha} ${hora} · ${cita.clienteNombre}`,
     html: plantilla("Nueva cita reservada", cuerpo),
-    texto: `Nueva cita\n${fecha} ${hora}\n${cita.servicioNombre} con ${cita.barberoNombre}\n${cita.clienteNombre} · ${cita.clienteTelefono}\nRef ${cita.codigo}`,
+    texto: `Nueva cita\n${fecha} ${hora}\n${cita.servicioNombre} con ${cita.barberoNombre}\n${cita.clienteNombre} · ${cita.clienteTelefono}\nRef ${cita.codigo}${
+      textoVerificacion(verificacion) ? `\n\nREVISAR: ${textoVerificacion(verificacion)}` : ""
+    }`,
     responderA: cita.clienteEmail ?? undefined,
   });
 }
@@ -239,16 +264,19 @@ export async function avisarLeadBarberia(m: {
   negocio: string;
   poblacion: string;
   texto: string;
+  verificacion?: Verificacion;
 }): Promise<ResultadoAviso> {
   const para = process.env.AVISOS_EMAIL || process.env.SMTP_USUARIO;
   if (!para) return { ok: false, motivo: "falta AVISOS_EMAIL" };
+  const revision = textoVerificacion(m.verificacion ?? { revisar: false, score: null, nota: null });
 
   return enviar({
     para,
-    asunto: `Barbería interesada · ${m.negocio || m.nombre}${m.poblacion ? ` · ${m.poblacion}` : ""}`,
+    asunto: `${marcaDeAsunto(m.verificacion ?? { revisar: false, score: null, nota: null })}Barbería interesada · ${m.negocio || m.nombre}${m.poblacion ? ` · ${m.poblacion}` : ""}`,
     html: plantilla(
       "Una barbería quiere la web",
-      `<table role="presentation" style="font-size:15px;margin:0 0 16px">
+      `${avisoRevisar(m.verificacion)}
+       <table role="presentation" style="font-size:15px;margin:0 0 16px">
          ${fila("Negocio", escapar(m.negocio || "—"))}
          ${fila("Población", escapar(m.poblacion || "—"))}
          ${fila("Contacto", escapar(m.nombre))}
@@ -257,7 +285,9 @@ export async function avisarLeadBarberia(m: {
        </table>
        <p style="margin:0;white-space:pre-wrap">${escapar(m.texto)}</p>`,
     ),
-    texto: `Barbería interesada\n${m.negocio} · ${m.poblacion}\n${m.nombre} · ${m.telefono} · ${m.email}\n\n${m.texto}`,
+    texto: `Barbería interesada\n${m.negocio} · ${m.poblacion}\n${m.nombre} · ${m.telefono} · ${m.email}\n\n${m.texto}${
+      revision ? `\n\nREVISAR: ${revision}` : ""
+    }`,
     responderA: m.email.includes("@no-facilitado") ? undefined : m.email,
   });
 }

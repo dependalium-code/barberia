@@ -24,6 +24,11 @@ export type DatosReserva = {
   clienteEmail?: string | null;
   notas?: string | null;
   origen?: OrigenCita;
+  /**
+   * Resultado de reCAPTCHA, si la cita viene de la web. NUNCA impide crearla:
+   * solo marca la que hay que mirar a ojo. Desde el panel no se pasa.
+   */
+  verificacion?: { revisar: boolean; score: number | null; nota: string | null };
 };
 
 export type ResultadoReserva =
@@ -141,6 +146,9 @@ export async function crearCita(datos: DatosReserva): Promise<ResultadoReserva> 
             clienteTelefono: telefono,
             clienteEmail: email,
             notas: datos.notas?.trim() || null,
+            revisar: datos.verificacion?.revisar ?? false,
+            verifScore: datos.verificacion?.score ?? null,
+            verifNota: datos.verificacion?.nota ?? null,
           },
           select: { id: true, codigo: true, tokenGestion: true },
         });

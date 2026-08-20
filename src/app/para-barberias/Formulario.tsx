@@ -3,6 +3,12 @@
 import { useActionState } from "react";
 import { pedirInformacion, type EstadoLead } from "./acciones";
 import { IconoCheck, IconoFlecha } from "@/componentes/Iconos";
+import {
+  AtribucionRecaptcha,
+  CampoRecaptcha,
+  PeticionRecaptcha,
+  useRecaptcha,
+} from "@/componentes/Recaptcha";
 
 const CAMPO =
   "mt-2 w-full border-2 border-white/25 bg-white/5 px-4 py-3 text-[1rem] text-acero-00 transition-colors placeholder:text-acero-30 focus:border-bermellon-vivo focus:outline-none";
@@ -12,6 +18,7 @@ export function FormularioBarberia() {
     pedirInformacion,
     null,
   );
+  const proteccion = useRecaptcha("lead_barberia");
   const v = estado?.valores ?? {};
 
   if (estado?.ok) {
@@ -27,7 +34,12 @@ export function FormularioBarberia() {
   }
 
   return (
-    <form action={enviar} className="campo-tinta border-2 border-white/25 p-6 sm:p-7">
+    <form
+      ref={proteccion.formulario}
+      action={enviar}
+      onSubmit={proteccion.alEnviar}
+      className="campo-tinta relative border-2 border-white/25 p-6 sm:p-7"
+    >
       {estado && !estado.ok && estado.mensaje && (
         <p
           role="alert"
@@ -92,13 +104,18 @@ export function FormularioBarberia() {
         </label>
       </div>
 
+      <CampoRecaptcha proteccion={proteccion} />
+      <PeticionRecaptcha proteccion={proteccion} tono="tinta" />
+
       <button
         type="submit"
-        disabled={enviando}
+        disabled={enviando || proteccion.comprobando}
         className="group mt-7 inline-flex w-full items-center justify-center gap-3 bg-bermellon px-8 py-4 text-white transition-colors hover:bg-white hover:text-tinta disabled:bg-white/20 disabled:text-acero-30 sm:w-auto"
       >
-        <span className="titular text-lg">{enviando ? "Enviando…" : "Que me la enseñen"}</span>
-        {!enviando && (
+        <span className="titular text-lg">
+          {enviando ? "Enviando…" : proteccion.comprobando ? "Comprobando…" : "Que me la enseñen"}
+        </span>
+        {!enviando && !proteccion.comprobando && (
           <IconoFlecha className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
         )}
       </button>
@@ -107,6 +124,8 @@ export function FormularioBarberia() {
         Te contestamos para enseñártela y resolver dudas. No te apuntamos a
         ninguna lista ni te mandamos publicidad.
       </p>
+
+      <AtribucionRecaptcha proteccion={proteccion} className="max-w-[58ch] text-acero-30" />
     </form>
   );
 }

@@ -143,6 +143,14 @@ model Cita {
   avisoOk      Boolean @default(false)
   avisoError   String?
 
+  /// reCAPTCHA v3. La cita se guarda SIEMPRE: esto solo marca cuál hay que
+  /// mirar a ojo. `revisar` se enciende tanto si Google la puntúa bajo como si
+  /// no hubo forma de comprobarla (sin JavaScript, con bloqueador, o porque
+  /// el cliente no dio permiso para cargar el script).
+  revisar    Boolean @default(false)
+  verifScore Float?
+  verifNota  String?
+
   canceladaEn  DateTime?
   motivoCancel String?
 
@@ -196,6 +204,12 @@ model Mensaje {
   leido      Boolean     @default(false)
   avisoOk    Boolean     @default(false)
   avisoError String?
+
+  /// reCAPTCHA v3. Igual que en Cita: el mensaje se guarda pase lo que pase y
+  /// esto solo dice si conviene mirarlo con lupa.
+  revisar    Boolean     @default(false)
+  verifScore Float?
+  verifNota  String?
   creadoEn   DateTime    @default(now())
 
   @@index([tipo, creadoEn])

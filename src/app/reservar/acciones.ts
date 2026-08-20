@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { crearCita } from "@/lib/reservas";
 import { avisarClienteCitaConfirmada, avisarNegocioCitaNueva } from "@/lib/correo";
+import { verificarRecaptcha } from "@/lib/recaptcha";
 
 export type EstadoReserva = {
   ok: boolean;
@@ -48,6 +49,13 @@ export async function reservar(
     barberoId = b.id;
   }
 
+  // Se consulta a Google ANTES de tocar la agenda, pero el veredicto no
+  // decide nada: una cita nunca se rechaza por reCAPTCHA. Solo se marca, y el
+  // aviso al negocio sale con «⚠ REVISAR» para que la miren antes de contar
+  // con ella.
+  const token = datos.get("recaptcha");
+  const verificacion = await verificarRecaptcha(typeof token === "string" ? token : null);
+
   const resultado = await crearCita({
     servicioId: servicio.id,
     barberoId,
@@ -57,6 +65,7 @@ export async function reservar(
     clienteTelefono: valores.telefono ?? "",
     clienteEmail: valores.email || null,
     notas: valores.notas || null,
+    verificacion,
   });
 
   if (!resultado.ok) {

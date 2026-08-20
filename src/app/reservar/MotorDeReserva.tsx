@@ -6,6 +6,12 @@ import { reservar, type EstadoReserva } from "./acciones";
 import { DiagramaCabeza } from "@/componentes/DiagramaCabeza";
 import { IconoCheck, IconoFlecha, IconoReloj } from "@/componentes/Iconos";
 import { AvisoDemoCita } from "@/componentes/BarraDemo";
+import {
+  AtribucionRecaptcha,
+  CampoRecaptcha,
+  PeticionRecaptcha,
+  useRecaptcha,
+} from "@/componentes/Recaptcha";
 import { duracion, precio, NEGOCIO } from "@/datos/negocio";
 import { fechaCorta, fechaLarga, hoyISO, nombreDia, sumarDias } from "@/lib/tiempo";
 
@@ -577,6 +583,7 @@ function PasoDatos({
   aviso: string;
   alVolverAHoras: () => void;
 }) {
+  const proteccion = useRecaptcha("reservar");
   const v = estado?.valores ?? {};
 
   return (
@@ -615,7 +622,12 @@ function PasoDatos({
         </div>
       )}
 
-      <form action={accion} className="mt-8">
+      <form
+        ref={proteccion.formulario}
+        action={accion}
+        onSubmit={proteccion.alEnviar}
+        className="mt-8"
+      >
         <input type="hidden" name="servicio" value={servicio ?? ""} />
         <input type="hidden" name="barbero" value={barbero ?? ""} />
         <input type="hidden" name="fecha" value={fecha ?? ""} />
@@ -664,15 +676,22 @@ function PasoDatos({
           </div>
         </div>
 
+        <CampoRecaptcha proteccion={proteccion} />
+        <PeticionRecaptcha proteccion={proteccion} />
+
         <button
           type="submit"
-          disabled={!listo || enviando}
+          disabled={!listo || enviando || proteccion.comprobando}
           className="group mt-8 inline-flex w-full items-center justify-center gap-3 bg-bermellon px-8 py-5 text-white transition-colors hover:bg-tinta disabled:cursor-not-allowed disabled:bg-acero-20 disabled:text-acero-50 sm:w-auto"
         >
           <span className="titular text-xl">
-            {enviando ? "Cogiendo la hora…" : "Confirmar la cita"}
+            {enviando
+              ? "Cogiendo la hora…"
+              : proteccion.comprobando
+                ? "Comprobando…"
+                : "Confirmar la cita"}
           </span>
-          {!enviando && (
+          {!enviando && !proteccion.comprobando && (
             <IconoFlecha className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
           )}
         </button>
@@ -685,6 +704,8 @@ function PasoDatos({
           </Link>
           .
         </p>
+
+        <AtribucionRecaptcha proteccion={proteccion} className="max-w-[60ch] text-acero-50" />
       </form>
     </section>
   );

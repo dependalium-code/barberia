@@ -22,6 +22,9 @@ export type CitaFicha = {
   clienteEmail: string | null;
   notas: string | null;
   avisoError: string | null;
+  revisar: boolean;
+  verifNota: string | null;
+  verifScore: number | null;
   etiquetaEstado: string;
 };
 
@@ -89,6 +92,16 @@ export function FichaCita({
               {cita.notas}
             </p>
           </div>
+        )}
+
+        {cita.revisar && (
+          <p className="mt-3 border-l-4 border-tinta bg-acero-10 px-3 py-2.5 text-[0.82rem] leading-relaxed">
+            <strong>Confírmala por teléfono.</strong> No se pudo comprobar que la
+            reservara una persona
+            {cita.verifNota ? `: ${cita.verifNota}` : ""}
+            {cita.verifScore !== null ? ` · puntuación ${cita.verifScore.toFixed(2)}` : ""}.
+            La hora está cogida igual, pero puede no venir nadie.
+          </p>
         )}
 
         {cita.avisoError && (

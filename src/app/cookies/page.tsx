@@ -31,10 +31,10 @@ export default function Cookies() {
         </p>
         {CON_RECAPTCHA && (
           <p>
-            La única excepción está en dos formularios —reservar hora y pedir
-            información sobre la web— y ahí <strong>se pide permiso antes</strong>,
-            en el propio formulario y solo a quien va a enviarlo. Está contado
-            justo debajo.
+            La única excepción está en los tres formularios —reservar hora,
+            escribirnos y pedir información sobre la web— y ahí{" "}
+            <strong>se pide permiso antes</strong>, en el propio formulario y
+            solo a quien va a enviarlo. Está contado justo debajo.
           </p>
         )}
       </Apartado>
@@ -71,7 +71,8 @@ export default function Cookies() {
       {CON_RECAPTCHA && (
         <Apartado titulo="reCAPTCHA de Google, en los formularios y con tu permiso">
           <p>
-            Los formularios de <Link href="/reservar">reservar hora</Link> y de{" "}
+            Los formularios de <Link href="/reservar">reservar hora</Link>,{" "}
+            <Link href="/contacto">contacto</Link> y{" "}
             <Link href="/para-barberias">información para barberías</Link> pueden
             usar <strong>reCAPTCHA v3 de Google</strong> para distinguir a una
             persona de un programa que rellena formularios en cadena. Sirve para

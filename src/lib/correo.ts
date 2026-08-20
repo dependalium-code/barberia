@@ -236,22 +236,28 @@ export async function avisarMensajeContacto(m: {
   email: string;
   telefono: string | null;
   texto: string;
+  verificacion?: Verificacion;
 }): Promise<ResultadoAviso> {
   const para = process.env.AVISOS_EMAIL || process.env.SMTP_USUARIO;
   if (!para) return { ok: false, motivo: "falta AVISOS_EMAIL" };
+  const sinMarca: Verificacion = { revisar: false, score: null, nota: null };
+  const revision = textoVerificacion(m.verificacion ?? sinMarca);
   return enviar({
     para,
-    asunto: `Mensaje web · ${m.nombre}`,
+    asunto: `${marcaDeAsunto(m.verificacion ?? sinMarca)}Mensaje web · ${m.nombre}`,
     html: plantilla(
       "Mensaje desde la web",
-      `<table role="presentation" style="font-size:15px;margin:0 0 16px">
+      `${avisoRevisar(m.verificacion)}
+       <table role="presentation" style="font-size:15px;margin:0 0 16px">
          ${fila("Nombre", escapar(m.nombre))}
          ${fila("Email", escapar(m.email))}
          ${fila("Teléfono", escapar(m.telefono ?? "—"))}
        </table>
        <p style="margin:0;white-space:pre-wrap">${escapar(m.texto)}</p>`,
     ),
-    texto: `${m.nombre} <${m.email}> ${m.telefono ?? ""}\n\n${m.texto}`,
+    texto: `${m.nombre} <${m.email}> ${m.telefono ?? ""}\n\n${m.texto}${
+      revision ? `\n\nREVISAR: ${revision}` : ""
+    }`,
     responderA: m.email,
   });
 }

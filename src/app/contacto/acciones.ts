@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { avisarMensajeContacto } from "@/lib/correo";
+import { verificarRecaptcha } from "@/lib/recaptcha";
 
 export type EstadoContacto = {
   ok: boolean;
@@ -39,6 +40,11 @@ export async function enviarMensaje(
     return { ok: false, mensaje: "Escribe un poco más para que sepamos qué necesitas.", valores };
   }
 
+  // reCAPTCHA se consulta pero no decide: solo marca. Un mensaje descartado por
+  // una puntuación es un cliente que se queda sin respuesta y no aparece en
+  // ningún panel.
+  const verificacion = await verificarRecaptcha(leer("recaptcha") || null);
+
   // Primero se guarda. Si esto falla, sí hay que decírselo al usuario y
   // mandarlo al teléfono: su mensaje no ha llegado a ninguna parte.
   let guardado;
@@ -49,6 +55,9 @@ export async function enviarMensaje(
         email: valores.email.slice(0, 160),
         telefono: valores.telefono.slice(0, 30) || null,
         texto: valores.texto.slice(0, 2000),
+        revisar: verificacion.revisar,
+        verifScore: verificacion.score,
+        verifNota: verificacion.nota,
       },
     });
   } catch (e) {
@@ -63,7 +72,12 @@ export async function enviarMensaje(
 
   // El aviso puede fallar sin que el usuario se entere: su mensaje YA está
   // guardado y sale en el panel marcado como «sin avisar».
-  const aviso = await avisarMensajeContacto({ id: guardado.id, ...valores, telefono: valores.telefono || null });
+  const aviso = await avisarMensajeContacto({
+    id: guardado.id,
+    ...valores,
+    telefono: valores.telefono || null,
+    verificacion,
+  });
   if (!aviso.ok) {
     console.error(`[MENSAJE ${guardado.id}] el aviso no salió:`, aviso.motivo);
   }

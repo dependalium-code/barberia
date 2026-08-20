@@ -3,6 +3,12 @@
 import { useActionState } from "react";
 import { enviarMensaje, type EstadoContacto } from "./acciones";
 import { IconoFlecha } from "@/componentes/Iconos";
+import {
+  AtribucionRecaptcha,
+  CampoRecaptcha,
+  PeticionRecaptcha,
+  useRecaptcha,
+} from "@/componentes/Recaptcha";
 
 const CAMPO =
   "mt-2 w-full border-2 border-acero-20 bg-acero-00 px-4 py-3 text-[1rem] text-tinta transition-colors placeholder:text-acero-30 focus:border-tinta focus:outline-none";
@@ -12,6 +18,7 @@ export function FormularioContacto() {
     enviarMensaje,
     null,
   );
+  const proteccion = useRecaptcha("contacto");
   const v = estado?.valores ?? {};
 
   if (estado?.ok) {
@@ -24,7 +31,12 @@ export function FormularioContacto() {
   }
 
   return (
-    <form action={enviar} className="border-2 border-tinta bg-acero-00 p-6 sm:p-7">
+    <form
+      ref={proteccion.formulario}
+      action={enviar}
+      onSubmit={proteccion.alEnviar}
+      className="relative border-2 border-tinta bg-acero-00 p-6 sm:p-7"
+    >
       {estado && !estado.ok && estado.mensaje && (
         <p role="alert" className="mb-6 bg-bermellon-humo px-4 py-3 text-[0.95rem] leading-relaxed">
           {estado.mensaje}
@@ -79,13 +91,18 @@ export function FormularioContacto() {
         </label>
       </div>
 
+      <CampoRecaptcha proteccion={proteccion} />
+      <PeticionRecaptcha proteccion={proteccion} />
+
       <button
         type="submit"
-        disabled={enviando}
+        disabled={enviando || proteccion.comprobando}
         className="group mt-7 inline-flex w-full items-center justify-center gap-3 bg-bermellon px-8 py-4 text-white transition-colors hover:bg-tinta disabled:bg-acero-20 disabled:text-acero-50 sm:w-auto"
       >
-        <span className="titular text-lg">{enviando ? "Enviando…" : "Enviar mensaje"}</span>
-        {!enviando && (
+        <span className="titular text-lg">
+          {enviando ? "Enviando…" : proteccion.comprobando ? "Comprobando…" : "Enviar mensaje"}
+        </span>
+        {!enviando && !proteccion.comprobando && (
           <IconoFlecha className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
         )}
       </button>
@@ -94,6 +111,8 @@ export function FormularioContacto() {
         Solo usamos estos datos para contestarte. No los cedemos a nadie ni te
         vamos a mandar publicidad.
       </p>
+
+      <AtribucionRecaptcha proteccion={proteccion} className="max-w-[58ch] text-acero-50" />
     </form>
   );
 }

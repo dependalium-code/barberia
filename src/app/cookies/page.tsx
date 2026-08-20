@@ -49,6 +49,15 @@ export default function Cookies() {
             Sirve para mantener la sesión abierta y caduca a los catorce días.
             Un cliente que solo reserva hora nunca la recibe.
           </li>
+          <li>
+            <strong>
+              <code>lb_video_v1</code>
+            </strong>{" "}
+            — tampoco es una cookie, sino una anotación en el almacenamiento
+            local que recuerda que ya has visto el vídeo de bienvenida, para no
+            volver a enseñártelo. Se queda en tu navegador y no viaja a ninguna
+            parte.
+          </li>
           {CON_RECAPTCHA && (
             <li>
               <strong>
@@ -63,8 +72,8 @@ export default function Cookies() {
           )}
         </ul>
         <p>
-          Las dos son técnicas y necesarias para que aquello funcione: no
-          sirven para perfilarte ni se comparten con nadie.
+          Todas son técnicas y necesarias para que aquello funcione: no sirven
+          para perfilarte ni se comparten con nadie.
         </p>
       </Apartado>
 

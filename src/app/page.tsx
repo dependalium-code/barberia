@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { NEGOCIO, duracion, precio } from "@/datos/negocio";
 import { Cabecera } from "@/componentes/Cabecera";
 import { PieDePagina } from "@/componentes/PieDePagina";
+import { VideoExplicativo } from "@/componentes/VideoExplicativo";
 import { ReglaDelDia } from "@/componentes/ReglaDelDia";
 import { DiagramaCabeza } from "@/componentes/DiagramaCabeza";
 import { Mapa } from "@/componentes/Mapa";
@@ -276,6 +277,10 @@ export default async function Portada() {
         </section>
       </main>
       <PieDePagina />
+      {/* Solo aquí: ni en /reservar, que cortaría una reserva a medias, ni en
+          /para-barberias, que es la única indexada y un diálogo encima cuenta
+          como intersticial intrusivo para Google. */}
+      <VideoExplicativo />
     </>
   );
 }

@@ -23,6 +23,12 @@ export function DatosEstructurados({
     telephone: NEGOCIO.telefonoE164,
     email: NEGOCIO.email,
     priceRange: "€€",
+    // `sameAs` es lo que ata esta web con los perfiles del negocio. Solo se
+    // declaran los que existen: una lista con huecos vacíos no ayuda a nadie.
+    ...(() => {
+      const perfiles = [NEGOCIO.instagram, NEGOCIO.facebook, NEGOCIO.fichaGoogle].filter(Boolean);
+      return perfiles.length ? { sameAs: perfiles } : {};
+    })(),
     address: {
       "@type": "PostalAddress",
       // Sin calle no se declara `streetAddress`: una ficha con la dirección a

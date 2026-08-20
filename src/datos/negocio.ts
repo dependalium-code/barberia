@@ -36,7 +36,7 @@ export const NEGOCIO = {
   mapa:
     "https://www.openstreetmap.org/export/embed.html?bbox=2.4347%2C41.5331%2C2.4547%2C41.5431&layer=mapnik&marker=41.5381%2C2.4447",
 
-  instagram: "",
+  instagram: "https://www.instagram.com/labarberiamataro/",
   facebook: "",
   fichaGoogle: "",
 

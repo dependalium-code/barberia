@@ -117,3 +117,16 @@ export function IconoWhatsapp(p: Props) {
     </svg>
   );
 }
+
+export function IconoInstagram(p: Props) {
+  // El único radio de la casa: el logotipo de Instagram es un cuadrado
+  // redondeado y sin ese radio deja de reconocerse. El resto —trazo de 1.5,
+  // punto macizo, nada de degradado— sigue la gramática de la lámina.
+  return (
+    <Svg className={p.className}>
+      <rect x="3" y="3" width="18" height="18" rx="4.5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" />
+    </Svg>
+  );
+}

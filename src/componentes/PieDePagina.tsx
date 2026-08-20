@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AGENCIA, DEMO, NEGOCIO } from "@/datos/negocio";
-import { IconoSitio, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
+import { IconoInstagram, IconoSitio, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
 
 export function PieDePagina() {
   const anio = new Date().getFullYear();
@@ -53,6 +53,17 @@ export function PieDePagina() {
                 <IconoWhatsapp className="h-4 w-4 text-bermellon-vivo" />
                 WhatsApp
               </a>
+              {NEGOCIO.instagram && (
+                <a
+                  href={NEGOCIO.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 flex items-center gap-2.5 transition-colors hover:text-bermellon-vivo"
+                >
+                  <IconoInstagram className="h-4 w-4 text-bermellon-vivo" />
+                  Instagram
+                </a>
+              )}
               <a
                 href={`mailto:${NEGOCIO.email}`}
                 className="mt-3 block transition-colors hover:text-bermellon-vivo"

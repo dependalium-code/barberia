@@ -3,7 +3,7 @@ import { Cabecera } from "@/componentes/Cabecera";
 import { PieDePagina } from "@/componentes/PieDePagina";
 import { Mapa } from "@/componentes/Mapa";
 import { FormularioContacto } from "./Formulario";
-import { IconoSitio, IconoTelefono, IconoWhatsapp, IconoReloj } from "@/componentes/Iconos";
+import { IconoInstagram, IconoSitio, IconoTelefono, IconoWhatsapp, IconoReloj } from "@/componentes/Iconos";
 import { NEGOCIO } from "@/datos/negocio";
 
 export const metadata: Metadata = {
@@ -55,6 +55,19 @@ export default function PaginaContacto() {
                   Escribir por WhatsApp
                 </a>
               </Dato>
+
+              {NEGOCIO.instagram && (
+                <Dato icono={<IconoInstagram className="h-5 w-5" />} clave="Instagram">
+                  <a
+                    href={NEGOCIO.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-bermellon"
+                  >
+                    @{NEGOCIO.instagram.replace(/\/$/, "").split("/").pop()}
+                  </a>
+                </Dato>
+              )}
 
               <Dato icono={<IconoReloj className="h-5 w-5" />} clave="Horario">
                 {NEGOCIO.horarioTexto.map((h) => (

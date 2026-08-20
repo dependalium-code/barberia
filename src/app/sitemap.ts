@@ -11,7 +11,10 @@ import { DEMO, SITE_URL } from "@/datos/negocio";
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const paginas: [string, number, MetadataRoute.Sitemap[number]["changeFrequency"]][] = DEMO
-    ? [["/para-barberias", 1, "monthly"]]
+    ? [
+        ["/para-barberias", 1, "monthly"],
+        ["/lo-que-cuesta-la-comision", 0.8, "yearly"],
+      ]
     : [
         ["", 1, "weekly"],
         ["/reservar", 0.9, "daily"],

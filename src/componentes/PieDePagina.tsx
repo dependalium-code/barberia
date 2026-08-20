@@ -111,7 +111,16 @@ export function PieDePagina() {
 
         {DEMO && (
           <p className="border-t border-tinta-80 py-5 text-[0.8rem] leading-relaxed text-acero-30">
-            Demostración de {AGENCIA.nombre}. Los servicios, los precios y el
+            Demostración de{" "}
+            <a
+              href={AGENCIA.web}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-acero-00"
+            >
+              {AGENCIA.nombre}
+            </a>
+            . Los servicios, los precios y el
             equipo son de ejemplo: no corresponden a ningún local real.{" "}
             <Link
               href="/para-barberias"

@@ -83,7 +83,11 @@ export const LEGAL = {
  * propósito: son afirmaciones comerciales y las pone el titular, no yo.
  */
 export const AGENCIA = {
-  nombre: "Dependalium Global Services",
+  // Marca comercial, NO razón social. Creaar es el nombre con el que se venden
+  // las webs; la sociedad que responde de todo es la de LEGAL, la misma para
+  // las dos marcas (mismo NIF, B26786962). Los textos legales no cambian.
+  nombre: "Creaar",
+  web: "https://creaar.es",
   telefono: "645 505 387",
   telefonoE164: "+34645505387",
   whatsapp: "+34645505387",

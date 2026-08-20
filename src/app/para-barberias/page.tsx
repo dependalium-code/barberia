@@ -243,7 +243,16 @@ export default async function ParaBarberias() {
               </div>
 
               <p className="mt-10 max-w-[52ch] text-[0.85rem] leading-relaxed text-acero-30">
-                Detrás de esto está {AGENCIA.nombre}. La web de ejemplo que estás
+                Detrás de esto está{" "}
+                <a
+                  href={AGENCIA.web}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-acero-00"
+                >
+                  {AGENCIA.nombre}
+                </a>
+                , estudio de diseño web en Mataró. La web de ejemplo que estás
                 viendo la hicimos nosotros, y es la misma que instalamos.
               </p>
             </div>

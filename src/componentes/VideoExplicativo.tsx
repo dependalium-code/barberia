@@ -5,7 +5,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { IconoCruz, IconoFlecha } from "@/componentes/Iconos";
 
 /**
- * El aviso de bienvenida con el vídeo que explica qué es esta web.
+ * El aviso de bienvenida: el reel de Instagram y la pregunta de venta.
+ *
+ * Quien entra por la portada llega casi siempre desde el reel o desde la
+ * biografía de Instagram, así que el diálogo dice a la cara para qué sirve
+ * esto —una web de barbería con la agenda dentro— y deja el vídeo debajo.
  *
  * Solo vive en la PORTADA y solo se enseña UNA VEZ por navegador. Ni en
  * `/reservar` —cortarle una reserva a alguien a mitad es la peor idea posible—
@@ -23,7 +27,7 @@ import { IconoCruz, IconoFlecha } from "@/componentes/Iconos";
  * recorta por arriba y no hay forma de alcanzarlo.
  */
 
-const LLAVE = "lb_video_v1";
+const LLAVE = "lb_video_v2";
 
 export function VideoExplicativo() {
   const [abierto, setAbierto] = useState(false);
@@ -97,7 +101,7 @@ export function VideoExplicativo() {
         className="sombra-alzada relative z-10 m-auto w-full max-w-[26rem] border-2 border-tinta bg-acero-00 outline-none"
       >
         <div className="campo-tinta flex items-center justify-between gap-4 bg-tinta px-5 py-3 text-white">
-          <p className="cota text-bermellon-vivo">Antes de trastear</p>
+          <p className="cota text-bermellon-vivo">Webs para barberías</p>
           <button
             type="button"
             onClick={cerrar}
@@ -109,14 +113,13 @@ export function VideoExplicativo() {
         </div>
 
         <div className="px-5 py-4 sm:px-6 sm:py-5">
-          <h2 id="titulo-video" className="titular text-[clamp(1.4rem,5.5vw,1.75rem)] leading-[1.05]">
-            Espera un momento,
-            <br />
-            que te explico qué verás
+          <h2 id="titulo-video" className="titular text-[clamp(1.75rem,min(7.4vw,7.5svh),2.5rem)]">
+            ¿A qué esperas para contratar tu web{" "}
+            <span className="text-bermellon">con gestión de visitas</span>?
           </h2>
-          <p className="mt-2.5 text-[0.9rem] leading-relaxed text-tinta-60">
-            La barbería es un ejemplo y no existe. La agenda, las reservas y el
-            panel sí funcionan: puedes trastear sin molestar a nadie.
+          <p className="mt-3 text-[0.9rem] leading-relaxed text-tinta-60">
+            Míralo funcionando en minuto y medio. La barbería del ejemplo no
+            existe; la agenda y el panel, sí: trastéalos sin molestar a nadie.
           </p>
 
           <video
@@ -125,7 +128,7 @@ export function VideoExplicativo() {
             playsInline
             preload="none"
             poster="/video/explicativo-cartel.jpg"
-            className="mx-auto mt-4 block max-h-[46svh] w-auto max-w-full border-2 border-tinta bg-tinta"
+            className="mx-auto mt-4 block max-h-[40svh] w-auto max-w-full border-2 border-tinta bg-tinta"
           >
             <source src="/video/explicativo.mp4" type="video/mp4" />
             Tu navegador no puede reproducir el vídeo.{" "}
@@ -138,13 +141,13 @@ export function VideoExplicativo() {
               onClick={cerrar}
               className="group inline-flex items-center justify-center gap-2.5 bg-bermellon px-6 py-3.5 text-white transition-colors hover:bg-tinta"
             >
-              <span className="cota">Tengo una barbería</span>
+              <span className="cota">Quiero mi web con agenda</span>
               <IconoFlecha className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
             <button
               type="button"
               onClick={cerrar}
-              className="cota border-2 border-tinta px-6 py-3.5 text-tinta transition-colors hover:bg-tinta hover:text-white"
+              className="cota min-h-11 border-2 border-tinta px-6 py-3.5 text-tinta transition-colors hover:bg-tinta hover:text-white"
             >
               Prefiero trastear yo
             </button>

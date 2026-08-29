@@ -51,7 +51,7 @@ export default function Cookies() {
           </li>
           <li>
             <strong>
-              <code>lb_video_v1</code>
+              <code>lb_video_v2</code>
             </strong>{" "}
             — tampoco es una cookie, sino una anotación en el almacenamiento
             local que recuerda que ya has visto el vídeo de bienvenida, para no

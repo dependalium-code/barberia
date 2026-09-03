@@ -1,0 +1,4 @@
+# Autoriza a Google a vender la publicidad de este dominio. Sin este fichero,
+# AdSense cuenta el inventario como no autorizado y avisa de «ingresos en
+# riesgo».
+google.com, pub-8723063263856575, DIRECT, f08c47fec0942fa0

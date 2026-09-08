@@ -159,7 +159,15 @@ export function useRecaptcha(accion: string) {
 
   const reenviar = useCallback(() => {
     dejarPasar.current = true;
-    formulario.current?.requestSubmit();
+    // ⚠️ Aplazar un tick NO es un adorno. El navegador IGNORA `requestSubmit()`
+    // si se llama en la MISMA TAREA en la que se está despachando el `submit`:
+    // un formulario que ya está enviando no vuelve a enviarse, y la llamada se
+    // pierde sin error. Pasaba en el camino de quien ya había respondido «no»,
+    // que llama aquí de forma síncrona desde `alEnviar`: su botón no hacía
+    // NADA. Los otros dos caminos funcionaban de chiripa — el «sí» porque
+    // espera la respuesta de Google, y la primera vez porque se pulsa en el
+    // diálogo, que es otro evento. `setTimeout` saca la llamada de esa tarea.
+    setTimeout(() => formulario.current?.requestSubmit(), 0);
   }, []);
 
   const enviarConToken = useCallback(async () => {

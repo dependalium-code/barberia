@@ -152,12 +152,13 @@ export const AGENCIA = {
       texto:
         "El cliente recibe su resguardo y un enlace para anular él mismo, que libera el hueco. Sale desde el correo de tu propio dominio.",
     },
-    // OJO: esta viñeta describe el montaje real. Si algún día se instala
-    // analítica, deja de ser cierta y hay que reescribirla junto con /cookies.
+    // OJO: esta viñeta describe el montaje real (Google Analytics solo tras
+    // «Aceptar», reCAPTCHA con permiso en el formulario). Si cambia, se
+    // reescribe junto con /cookies.
     {
-      titulo: "Sin banner de cookies",
+      titulo: "Cookies como pide la AEPD",
       texto:
-        "No lleva analítica ni rastreadores, así que nadie se encuentra el cartel de aceptar cookies al entrar. Lo único de terceros es el filtro antirrobots de los formularios, y ahí se pide permiso antes de cargar nada. Aviso legal, privacidad y política de cookies vienen escritos.",
+        "Las visitas se cuentan con Google Analytics solo si el visitante acepta: hasta entonces no se carga nada de Google, y rechazar cuesta lo mismo que aceptar. El filtro antirrobots de los formularios pide su propio permiso antes de cargar. Aviso legal, privacidad y política de cookies vienen escritos.",
     },
   ],
 } as const;

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
 import { DEMO, NEGOCIO, SITE_URL } from "@/datos/negocio";
+import AvisoCookies from "@/componentes/AvisoCookies";
 import "./globals.css";
 
 const titular = Archivo({
@@ -84,6 +85,7 @@ export default function LayoutRaiz({ children }: { children: React.ReactNode }) 
           Saltar al contenido
         </a>
         {children}
+        <AvisoCookies />
       </body>
     </html>
   );

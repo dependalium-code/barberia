@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AGENCIA, DEMO, NEGOCIO } from "@/datos/negocio";
+import { BotonPreferencias } from "@/componentes/AvisoCookies";
 import { IconoInstagram, IconoSitio, IconoTelefono, IconoWhatsapp } from "@/componentes/Iconos";
 
 export function PieDePagina() {
@@ -103,6 +104,7 @@ export function PieDePagina() {
             <Link href="/cookies" className="cota text-acero-30 transition-colors hover:text-acero-00">
               Cookies
             </Link>
+            <BotonPreferencias className="cota text-left text-acero-30 transition-colors hover:text-acero-00" />
             <Link href="/panel" className="cota text-acero-30 transition-colors hover:text-acero-00">
               Panel
             </Link>

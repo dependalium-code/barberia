@@ -5,11 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /**
  * reCAPTCHA v3 con permiso pedido DENTRO del formulario.
  *
- * Esta web no lleva analítica ni rastreadores, así que no hay banner de
- * cookies: no habría nada que consentir en la carta, en el equipo o en el
- * local. El único tercero es reCAPTCHA y solo vive en dos formularios, así que
- * el permiso se pide ahí y solo a quien va a enviar. Quien entra a mirar horas
- * no se encuentra un cartel ni recibe una sola petición a Google.
+ * Este permiso es aparte del aviso de estadísticas (`AvisoCookies`, Google
+ * Analytics): reCAPTCHA solo vive en los formularios, así que se pide ahí y
+ * solo a quien va a enviar. Decir que sí a las estadísticas no es decir que sí
+ * a reCAPTCHA, ni al revés.
  *
  * Reglas que se cumplen aquí:
  * - Antes del sí NO se inyecta nada. `window.grecaptcha` es `undefined` y no
@@ -281,8 +280,7 @@ export function PeticionRecaptcha({
       </p>
       <p className={`mt-2 max-w-[62ch] text-[0.9rem] leading-relaxed ${cuerpo}`}>
         Usaríamos reCAPTCHA de Google, que guarda una cookie suya en tu
-        navegador y le manda tu dirección IP. Es lo único de terceros que hay en
-        esta web.{" "}
+        navegador y le manda tu dirección IP.{" "}
         <strong className={oscuro ? "text-acero-00" : "text-tinta"}>
           Digas lo que digas, tu envío sale igual.
         </strong>{" "}

@@ -185,7 +185,7 @@ export default function Privacidad() {
       <Apartado titulo="Cookies">
         <p>
           Lo que se guarda en tu navegador está explicado en la{" "}
-          <Link href="/cookies">política de cookies</Link>. Adelanto: casi nada.
+          <Link href="/cookies">política de cookies</Link>, con lo que se instala solo si lo aceptas y cómo retirar el permiso.
         </p>
       </Apartado>
     </PaginaTexto>

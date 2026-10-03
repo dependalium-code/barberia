@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Apartado, PaginaTexto } from "@/componentes/PaginaTexto";
+import { BotonPreferencias } from "@/componentes/AvisoCookies";
 import { CambiarPermisoRecaptcha } from "@/componentes/Recaptcha";
 import { LEGAL, NEGOCIO } from "@/datos/negocio";
+import { GA_ID } from "@/lib/ga";
 
 export const metadata: Metadata = {
   title: "Política de cookies",
@@ -15,29 +17,52 @@ export const metadata: Metadata = {
  */
 const CON_RECAPTCHA = Boolean(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
 
+/** Lo mismo con Google Analytics: sin GA_ID, ni aviso ni mención. */
+const CON_ANALITICA = Boolean(GA_ID);
+
 export default function Cookies() {
   return (
     <PaginaTexto
       titulo="Cookies"
       entradilla="Qué guarda esta web en tu navegador. Menos de lo que te esperas."
     >
-      <Apartado titulo="No hay banner porque no hay nada que consentir al entrar">
-        <p>
-          Esta web <strong>no usa cookies de publicidad ni de analítica</strong>.
-          No hay Google Analytics, ni píxel de Facebook, ni nada que siga tus
-          pasos por otros sitios. Por eso no verás el cartelito de aceptar
-          cookies nada más entrar: la ley solo obliga a pedir permiso para las
-          que no son imprescindibles, y navegando por aquí no se pone ninguna.
-        </p>
-        {CON_RECAPTCHA && (
+      {CON_ANALITICA ? (
+        <Apartado titulo="Nada de Google hasta que dices que sí">
           <p>
-            La única excepción está en los tres formularios —reservar hora,
-            escribirnos y pedir información sobre la web— y ahí{" "}
-            <strong>se pide permiso antes</strong>, en el propio formulario y
-            solo a quien va a enviarlo. Está contado justo debajo.
+            Esta web <strong>no usa cookies de publicidad</strong> ni píxeles de
+            redes sociales. Lo único que puede medir tu visita es{" "}
+            <strong>Google Analytics</strong>, y solo si pulsas «Aceptar» en el
+            aviso de cookies. Hasta entonces no se carga ningún script de Google
+            ni se instala ninguna cookie suya. «Rechazar» cuesta lo mismo que
+            «Aceptar», y seguir navegando sin contestar no cuenta como un sí.
           </p>
-        )}
-      </Apartado>
+          {CON_RECAPTCHA && (
+            <p>
+              Aparte está el filtro antirrobots de los tres formularios
+              —reservar hora, escribirnos y pedir información sobre la web—, que
+              también <strong>pide permiso antes</strong>, en el propio
+              formulario y solo a quien va a enviarlo. Está contado más abajo.
+            </p>
+          )}
+        </Apartado>
+      ) : (
+        <Apartado titulo="No hay banner porque no hay nada que consentir al entrar">
+          <p>
+            Esta web <strong>no usa cookies de publicidad ni de analítica</strong>.
+            Por eso no verás el cartelito de aceptar cookies nada más entrar: la
+            ley solo obliga a pedir permiso para las que no son imprescindibles,
+            y navegando por aquí no se pone ninguna.
+          </p>
+          {CON_RECAPTCHA && (
+            <p>
+              La única excepción está en los tres formularios —reservar hora,
+              escribirnos y pedir información sobre la web— y ahí{" "}
+              <strong>se pide permiso antes</strong>, en el propio formulario y
+              solo a quien va a enviarlo. Está contado justo debajo.
+            </p>
+          )}
+        </Apartado>
+      )}
 
       <Apartado titulo="Lo único que se guarda por nuestra parte">
         <ul>
@@ -58,6 +83,16 @@ export default function Cookies() {
             volver a enseñártelo. Se queda en tu navegador y no viaja a ninguna
             parte.
           </li>
+          {CON_ANALITICA && (
+            <li>
+              <strong>
+                <code>lb_estadisticas_v1</code>
+              </strong>{" "}
+              — no es una cookie, es una anotación en el almacenamiento local de
+              tu navegador con tu respuesta al aviso de estadísticas. No sale de
+              tu equipo y sirve para no volver a preguntarte.
+            </li>
+          )}
           {CON_RECAPTCHA && (
             <li>
               <strong>
@@ -76,6 +111,44 @@ export default function Cookies() {
           para perfilarte ni se comparten con nadie.
         </p>
       </Apartado>
+
+      {CON_ANALITICA && (
+        <Apartado titulo="Google Analytics, solo si lo aceptas">
+          <p>
+            Si pulsas «Aceptar» en el aviso, usamos{" "}
+            <strong>Google Analytics 4</strong> para saber cuánta gente visita la
+            web y qué páginas mira, de forma agregada. El servicio lo presta{" "}
+            <strong>Google Ireland Limited</strong> (Gordon House, Barrow Street,
+            Dublín 4, Irlanda). Estas son las cookies que pone:
+          </p>
+          <ul>
+            <li>
+              <strong>
+                <code>_ga</code>
+              </strong>{" "}
+              — distingue a un visitante de otro sin saber quién es. Dura 2 años.
+            </li>
+            <li>
+              <strong>
+                <code>_ga_{GA_ID.replace(/^G-/, "")}</code>
+              </strong>{" "}
+              — mantiene el estado de la visita. Dura 2 años.
+            </li>
+          </ul>
+          <p>
+            Según Google, Analytics 4 no guarda las direcciones IP. Google puede tratar
+            datos fuera del Espacio Económico Europeo al amparo del Marco de
+            Privacidad de Datos UE-EE. UU.
+          </p>
+          <p>
+            <strong>Cambiar de idea:</strong> con este botón, o con
+            «Preferencias de cookies» en el pie de cualquier página, vuelve a
+            salir el aviso. Si retiras el permiso, borramos las cookies de
+            Google y la página se recarga.
+          </p>
+          <BotonPreferencias className="cota inline-flex w-fit bg-tinta px-5 py-3 text-white transition-colors hover:bg-bermellon" />
+        </Apartado>
+      )}
 
       {CON_RECAPTCHA && (
         <Apartado titulo="reCAPTCHA de Google, en los formularios y con tu permiso">
@@ -160,15 +233,6 @@ export default function Cookies() {
           El mapa de la página de contacto se carga desde OpenStreetMap, que no
           instala cookies de seguimiento. Se eligió por eso, en lugar del mapa de
           Google, que sí las pone antes de que nadie acepte nada.
-        </p>
-      </Apartado>
-
-      <Apartado titulo="Si añades analítica más adelante">
-        <p>
-          Si algún día se instala una herramienta de medición, esta página deja
-          de ser cierta y hay que poner un banner de consentimiento en condiciones,
-          con rechazo tan fácil como la aceptación. Mientras tanto, no hay nada que
-          consentir por el mero hecho de navegar.
         </p>
       </Apartado>
 

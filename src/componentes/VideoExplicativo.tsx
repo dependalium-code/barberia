@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IconoCruz, IconoFlecha } from "@/componentes/Iconos";
+import { EVENTO_DECIDIDO, avisoCookiesPendiente } from "@/componentes/AvisoCookies";
 
 /**
  * El aviso de bienvenida: el reel de Instagram y la pregunta de venta.
@@ -44,7 +45,16 @@ export function VideoExplicativo() {
     } catch {
       // Modo privado con el almacenamiento capado: se enseña y punto.
     }
-    if (!visto) setAbierto(true);
+    if (visto) return;
+    // Con el aviso de cookies esperando respuesta, el vídeo espera: dos
+    // diálogos a la vez y este tapaba los botones de Aceptar y Rechazar.
+    if (!avisoCookiesPendiente()) {
+      setAbierto(true);
+      return;
+    }
+    const abrir = () => setAbierto(true);
+    window.addEventListener(EVENTO_DECIDIDO, abrir, { once: true });
+    return () => window.removeEventListener(EVENTO_DECIDIDO, abrir);
   }, []);
 
   const cerrar = useCallback(() => {

@@ -23,6 +23,13 @@ const GA = GA_ID;
 const CLAVE = "lb_estadisticas_v1";
 const VERSION = 1;
 export const EVENTO_REABRIR = "lb:preferencias-cookies";
+/** Se lanza al responder el aviso: lo escucha el vídeo de bienvenida para no taparlo. */
+export const EVENTO_DECIDIDO = "lb:cookies-decididas";
+
+/** ¿Está el aviso esperando respuesta? (Sin GA no hay aviso, así que no.) */
+export function avisoCookiesPendiente(): boolean {
+  return Boolean(GA) && leer() === null;
+}
 
 type Eleccion = "si" | "no" | null;
 
@@ -118,6 +125,7 @@ export default function AvisoCookies() {
     }
     if (valor === "si") cargarGoogle();
     setEleccion(valor);
+    window.dispatchEvent(new Event(EVENTO_DECIDIDO));
   };
 
   // Los dos botones comparten clase: rechazar cuesta exactamente lo mismo.

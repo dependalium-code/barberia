@@ -182,6 +182,15 @@ export default function Privacidad() {
         )}
       </Apartado>
 
+      <Apartado titulo="Recuento de visitas">
+        <p>
+          Contamos de forma agregada las páginas vistas y los clics en teléfono,
+          WhatsApp, correo o formulario, para saber qué páginas funcionan. No usa
+          cookies, no guarda nada en tu navegador y no recoge datos que te
+          identifiquen, así que no necesita tu consentimiento.
+        </p>
+      </Apartado>
+
       <Apartado titulo="Cookies">
         <p>
           Lo que se guarda en tu navegador está explicado en la{" "}

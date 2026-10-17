@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, Martian_Mono } from "next/font/google";
 import { DEMO, NEGOCIO, SITE_URL } from "@/datos/negocio";
 import AvisoCookies from "@/componentes/AvisoCookies";
+import Script from "next/script";
 import "./globals.css";
 
 const titular = Archivo({
@@ -86,6 +87,8 @@ export default function LayoutRaiz({ children }: { children: React.ReactNode }) 
         </a>
         {children}
         <AvisoCookies />
+        {/* Contador del grupo: sin cookies ni datos personales, no necesita consentimiento */}
+        <Script src="https://contador-grupo.vercel.app/s.js" strategy="afterInteractive" />
       </body>
     </html>
   );
